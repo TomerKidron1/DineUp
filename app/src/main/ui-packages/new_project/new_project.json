@@ -1,0 +1,72 @@
+{
+  "name": "new_project",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "G4rFGEhg2sMVsncOvbuiZE",
+    "node": "29:33",
+    "version": "2737463353"
+  },
+  "default": "New Project",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "Rectangle 3"
+      }
+    ],
+    "modes": {
+      "New Project": {
+        "rules": [
+          {
+            "id": "top_level",
+            "tap-handler": "$on New Project tapped",
+            "is-structured": "false",
+            "children": [
+              "Rectangle 3"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "Rectangle 3",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "rectangle_3.svg"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "on New Project tapped": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "New Project",
+      "size": {
+        "width": 241.0,
+        "height": 221.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

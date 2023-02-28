@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="option1">Wowed Events</string>
+    <string name="option2">The Family Tableplace</string>
+    <string name="option3">Table Of Five</string>
+    <string name="option4">Table Mate</string>
+    <string name="option5">DineUp</string>
+    <string name="option6">Family Pack</string>
+    <string name="option7">Coopee</string>
+    <string name="option8">TableSpot</string>
+    <string name="option9">SteakIt</string>
+    <string name="option10">On The Circle</string>
+</resources>

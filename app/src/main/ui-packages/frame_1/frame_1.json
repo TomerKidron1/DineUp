@@ -1,0 +1,55 @@
+{
+  "name": "frame_1",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "G4rFGEhg2sMVsncOvbuiZE",
+    "node": "29:3",
+    "version": "2737463353"
+  },
+  "default": "Frame 1",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      }
+    ],
+    "modes": {
+      "Frame 1": {
+        "rules": [
+          {
+            "id": "top_level",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "is-structured": "false"
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "Frame 1",
+      "size": {
+        "width": 243.0,
+        "height": 49.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/icon_home_outline"/>
+    <item android:id="@+id/newoneplus"
+        android:title="New Project"
+        android:icon="@drawable/cross"/>
+    <item android:id="@+id/saved"
+        android:title="Saved"
+        android:icon="@drawable/icon_save"
+        />
+</menu>
