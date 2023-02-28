@@ -92,7 +92,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getChildrenCount() == 5)
-                    retrieveObjects();
+                    retrieveObjects(snapshot);
             }
 
             @Override
@@ -104,18 +104,68 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void retrieveObjects() {
+    private void retrieveObjects(DataSnapshot snapshot) {
+        for(int i=0;i<(snapshot.child("paramenters").getChildrenCount())/2;i++)
+        {
+            addView((Integer) snapshot.child("parameters").child("x-imageview"+i).getValue(),(Integer) snapshot.child("parameters").child("y-imageview"+i).getValue(),(Integer)snapshot.child("parameters").child("object"+i).getValue());
+        }
+    }
 
+    private void addView(int x,int y,int object) {
+        ImageView imageview = new ImageView(TableSettings.this);
+        FrameLayout linearlayout = findViewById(R.id.layout);
+        imageview.setImageResource(object);
+        LinearLayout.LayoutParams params = new LinearLayout
+                .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        imageview.setX(x);
+        imageview.setY(y);
+        imageview.setLayoutParams(params);
+        imageview.setId(count);
+        count++;
+
+        imageview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final int x = (int) event.getRawX();
+                final int y = (int) event.getRawY();
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN: {
+                        FrameLayout.LayoutParams lParams = (FrameLayout.LayoutParams) view.getLayoutParams();
+
+                        xDelta = x - lParams.leftMargin;
+                        yDelta = y - lParams.topMargin;
+                        break;
+                    }
+                    case MotionEvent.ACTION_UP: {
+                        break;
+                    }
+                    case MotionEvent.ACTION_MOVE: {
+                        if (x - xDelta + view.getWidth() <= linearlayout.getWidth()
+                                && y - yDelta + view.getHeight() <= linearlayout.getHeight()
+                                && x - xDelta >= 0
+                                && y - yDelta >= 0) {
+                            FrameLayout.LayoutParams layoutParams =
+                                    (FrameLayout.LayoutParams) view.getLayoutParams();
+                            layoutParams.leftMargin = x - xDelta;
+                            layoutParams.topMargin = y - yDelta;
+                            layoutParams.rightMargin = 0;
+                            layoutParams.bottomMargin = 0;
+                            view.setLayoutParams(layoutParams);
+                        }
+                        break;
+                    }
+                }
+                linearlayout.invalidate();
+                return true;
+            }
+        });
+        linearlayout.addView(imageview);
     }
 
     private int xDelta,yDelta;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onClick(View view) {
-        if(view == button1){
-            Toast.makeText(this, ""+R.drawable.big_circle_white, Toast.LENGTH_SHORT).show();
-
-        }
         if(view == procceed){
             String number = sp.getString("number","");
             Toast.makeText(this, number, Toast.LENGTH_SHORT).show();
@@ -130,7 +180,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                             imageView.getLocationOnScreen(location);
                             map.put("x-imageview " + i, String.valueOf(location[0]));
                             map.put("y-imageview " + i, String.valueOf(location[1]));
-                            // add an object detection
+                            map.put("object "+ i,String.valueOf(imageView.getTag()));
                             ref2.child(number).child("parameters").setValue(map);
                         }
                     }
@@ -159,6 +209,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
             imageview.setId(count);
+            imageview.setTag(R.drawable.big_circle_white);
             count++;
 
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -206,6 +257,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
+            imageview.setTag(R.drawable.small_circle_white);
             imageview.setId(count);
             count++;
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -253,6 +305,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
+            imageview.setTag(R.drawable.rectangle_white);
             imageview.setId(count);
             count++;
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -300,6 +353,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
+            imageview.setTag(R.drawable.vertical_rectangle_table_white);
             imageview.setId(count);
             count++;
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -347,6 +401,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
+            imageview.setTag(R.drawable.rounded_table_white);
             imageview.setId(count);
             count++;
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -394,6 +449,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
+            imageview.setTag(R.drawable.vertical_rounded_table_white);
             imageview.setId(count);
             count++;
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -441,6 +497,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
+            imageview.setTag(R.drawable.square_white);
             imageview.setId(count);
             count++;
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -502,6 +559,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                         .LayoutParams((int)width, (int)height);
                 imageview.setImageResource(R.drawable.custom);
                 imageview.setLayoutParams(params);
+                imageview.setTag(R.drawable.custom);
                 imageview.setId(count);
                 count++;
                 imageview.setOnTouchListener(new View.OnTouchListener() {
