@@ -47,13 +47,18 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     DatabaseReference ref;
     DatabaseReference ref2;
     FirebaseAuth auth;
+    Button button1;
     int count;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablesettings);
         count=0;
+        button1 = findViewById(R.id.button12);
+        button1.setOnClickListener(this);
+        sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         layout = findViewById(R.id.layout);
         reset= findViewById(R.id.reset_button);
         reset.setOnClickListener(this);
@@ -83,16 +88,35 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         verticalRoundedRectangle.setOnClickListener(this);
         square.setOnClickListener(this);
         custom.setOnClickListener(this);
+        ref2.child(sp.getString("number","")).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getChildrenCount() == 5)
+                    retrieveObjects();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
     }
+
+    private void retrieveObjects() {
+
+    }
+
     private int xDelta,yDelta;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onClick(View view) {
+        if(view == button1){
+            Toast.makeText(this, ""+R.drawable.big_circle_white, Toast.LENGTH_SHORT).show();
+
+        }
         if(view == procceed){
-            SharedPreferences sp = getSharedPreferences("currentProject",MODE_PRIVATE);
-            SharedPreferences.Editor spe = sp.edit();
             String number = sp.getString("number","");
             Toast.makeText(this, number, Toast.LENGTH_SHORT).show();
             ref2.child(number).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -106,6 +130,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                             imageView.getLocationOnScreen(location);
                             map.put("x-imageview " + i, String.valueOf(location[0]));
                             map.put("y-imageview " + i, String.valueOf(location[1]));
+                            // add an object detection
                             ref2.child(number).child("parameters").setValue(map);
                         }
                     }

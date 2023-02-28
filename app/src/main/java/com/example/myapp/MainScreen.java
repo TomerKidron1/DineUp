@@ -163,13 +163,25 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                     button.addView(date);
                     button.setForegroundGravity(Gravity.CENTER);
                     button.setBackgroundResource(R.drawable.saved_proj_tiles);
+                    int finalI = i;
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(MainScreen.this, "" , Toast.LENGTH_SHORT).show();
+                            int rightNumber=0;
+                            for(int j=0;j< snapshot.getChildrenCount();j++)
+                            {
+                                if(snapshot.child(String.valueOf(j)).child("name").getValue().equals(saved.get(finalI).getProject_name()))
+                                    rightNumber = j;
+
+                            }
+                            Toast.makeText(MainScreen.this, ""+snapshot.child(String.valueOf(rightNumber)).child("name").getValue(), Toast.LENGTH_SHORT).show();
                             SharedPreferences sp= getSharedPreferences("currentProject",MODE_PRIVATE);
                             SharedPreferences.Editor spe = sp.edit();
-                            spe.putString("number",snapshot.getKey());
+                            spe.putString("number", String.valueOf(rightNumber));
+                            spe.commit();
+                            startActivity(new Intent(MainScreen.this,TableSettings.class));
+                            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+
 
                         }
                     });
