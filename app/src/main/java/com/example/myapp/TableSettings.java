@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class TableSettings extends AppCompatActivity implements View.OnClickListener {
     FrameLayout layout;
     Button bigCircle,smallCircle;
@@ -88,39 +89,36 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         verticalRoundedRectangle.setOnClickListener(this);
         square.setOnClickListener(this);
         custom.setOnClickListener(this);
-        ref2.child(sp.getString("number","")).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getChildrenCount() == 5)
-                    retrieveObjects(snapshot);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
 
     }
 
     private void retrieveObjects(DataSnapshot snapshot) {
-        for(int i=0;i<(snapshot.child("paramenters").getChildrenCount())/2;i++)
+
+        if((snapshot.child("parameters").getChildrenCount())/3 >0)
+            Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+        for(int i=0;i<(snapshot.child("parameters").getChildrenCount())/3;i++)
         {
-            addView((Integer) snapshot.child("parameters").child("x-imageview"+i).getValue(),(Integer) snapshot.child("parameters").child("y-imageview"+i).getValue(),(Integer)snapshot.child("parameters").child("object"+i).getValue());
+            //Toast.makeText(this, ""+snapshot.child("parameters").child("x-imageview "+i).getValue(), Toast.LENGTH_SHORT).show();
+            addView(Math.toIntExact((Long)snapshot.child("parameters").child("object "+i).getValue()));
+            ImageView imageView = findViewById(count);
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+            imageView.setY(Math.toIntExact((Long)snapshot.child("parameters").child("y-imageview "+i).getValue()));
+            imageView.setX(Math.toIntExact((Long) snapshot.child("parameters").child("x-imageview "+i).getValue()));
         }
     }
+    private int xDelta,yDelta;
 
-    private void addView(int x,int y,int object) {
+    public void addView(int object) {
         ImageView imageview = new ImageView(TableSettings.this);
-        FrameLayout linearlayout = findViewById(R.id.layout);
+        FrameLayout frameLayout = findViewById(R.id.layout);
         imageview.setImageResource(object);
         LinearLayout.LayoutParams params = new LinearLayout
                 .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        imageview.setX(x);
-        imageview.setY(y);
         imageview.setLayoutParams(params);
         imageview.setId(count);
+
         count++;
 
         imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -140,8 +138,8 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                         break;
                     }
                     case MotionEvent.ACTION_MOVE: {
-                        if (x - xDelta + view.getWidth() <= linearlayout.getWidth()
-                                && y - yDelta + view.getHeight() <= linearlayout.getHeight()
+                        if (x - xDelta + view.getWidth() <= frameLayout.getWidth()
+                                && y - yDelta + view.getHeight() <= frameLayout.getHeight()
                                 && x - xDelta >= 0
                                 && y - yDelta >= 0) {
                             FrameLayout.LayoutParams layoutParams =
@@ -155,32 +153,47 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                         break;
                     }
                 }
-                linearlayout.invalidate();
+                frameLayout.invalidate();
                 return true;
             }
         });
-        linearlayout.addView(imageview);
+        frameLayout.addView(imageview);
     }
 
-    private int xDelta,yDelta;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onClick(View view) {
+        if(view ==button1){
+            ref2.child(sp.getString("number","")).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.getChildrenCount() == 5)
+                        retrieveObjects(snapshot);
+                    boolean snap = snapshot.getChildrenCount() == 5;
+                    //Toast.makeText(TableSettings.this, ""+snap, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
         if(view == procceed){
             String number = sp.getString("number","");
             Toast.makeText(this, number, Toast.LENGTH_SHORT).show();
             ref2.child(number).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Map<String,String> map = new HashMap<>();
+                    Map<String,Object> map = new HashMap<>();
                     if(count!=0){
                         for(int i=0;i<count;i++) {
                             int[] location = new int[2];
                             ImageView imageView = findViewById(i);
                             imageView.getLocationOnScreen(location);
-                            map.put("x-imageview " + i, String.valueOf(location[0]));
-                            map.put("y-imageview " + i, String.valueOf(location[1]));
-                            map.put("object "+ i,String.valueOf(imageView.getTag()));
+                            map.put("x-imageview " + i, location[0]);
+                            map.put("y-imageview " + i, location[1]);
+                            map.put("object "+ i,imageView.getTag());
                             ref2.child(number).child("parameters").setValue(map);
                         }
                     }
