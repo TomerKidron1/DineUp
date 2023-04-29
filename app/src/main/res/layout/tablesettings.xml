@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appbackground3">
+
+    <ImageView
+        android:id="@+id/menuimage2"
+        android:layout_width="44dp"
+        android:layout_height="39dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.046"
+        app:srcCompat="@drawable/ic_baseline_menu_24" />
+
+    <FrameLayout
+        android:id="@+id/layout"
+        android:layout_width="280dp"
+        android:layout_height="322dp"
+        android:background="@color/grey"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498"></FrameLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="102dp"
+        android:layout_height="342dp"
+        android:layout_marginStart="277dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/layout"
+        app:layout_constraintStart_toStartOf="@+id/layout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/big_circle_table"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/big_circle_table"
+                android:textAllCaps="false"
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/small_circle_table"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:background="@drawable/small_circle_table"
+                android:elevation="10dp" />
+
+            <Button
+                android:id="@+id/rectangle_table"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/rectangle_table" />
+
+            <Button
+                android:id="@+id/vertical_rectangle_table"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:background="@drawable/vertical_rectangle" />
+
+            <Button
+                android:id="@+id/rounded_table"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:background="@drawable/rounded_rectangle" />
+
+            <Button
+                android:id="@+id/vertical_rounded_table"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:background="@drawable/vertical_rounded_rectangle" />
+
+            <Button
+                android:id="@+id/square_table"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:background="@drawable/square_table" />
+
+            <Button
+                android:id="@+id/custom"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:background="@drawable/rectangle_1_shape"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Custom"
+                android:textAllCaps="false"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"
+        android:text="Set Your Table"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.082" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Press the buttons to your right\nto add tables into your project"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.142" />
+
+    <Button
+        android:id="@+id/procceed"
+        android:layout_width="132dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/rectangle_2_shape"
+        android:fontFamily="@font/inter_bold"
+        android:text="Procceed"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reset_button"
+        app:layout_constraintVertical_bias="0.343" />
+
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="79dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="41dp"
+        android:background="@drawable/rectangle_1_shape"
+        android:fontFamily="@font/inter_bold"
+        android:text="Reset"
+        android:textAllCaps="false"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout"
+        app:layout_constraintVertical_bias="0.029" />
+
+    <ImageView
+        android:id="@+id/question"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.183"
+        app:srcCompat="@drawable/baseline_question_mark_24" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="13dp"
+        tools:layout_editor_absoluteY="8dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
