@@ -48,7 +48,6 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     DatabaseReference ref;
     DatabaseReference ref2;
     FirebaseAuth auth;
-    Button button1;
     int count;
     SharedPreferences sp;
     Button button2;
@@ -58,8 +57,6 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablesettings);
         count=0;
-        button1 = findViewById(R.id.button12);
-        button1.setOnClickListener(this);
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         layout = findViewById(R.id.layout);
         reset= findViewById(R.id.reset_button);
@@ -173,9 +170,6 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onClick(View view) {
-        if(view ==button1){
-
-        }
         if(view == procceed){
             String number = sp.getString("number","");
             Toast.makeText(this, number, Toast.LENGTH_SHORT).show();

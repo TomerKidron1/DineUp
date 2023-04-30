@@ -118,6 +118,7 @@
                 android:background="@drawable/rectangle_1_shape"
                 android:fontFamily="@font/inter_semibold"
                 android:text="Custom"
+                android:textColor="@color/black"
                 android:textAllCaps="false"
                 android:textSize="12dp" />
         </LinearLayout>
@@ -179,6 +180,7 @@
         android:background="@drawable/rectangle_1_shape"
         android:fontFamily="@font/inter_bold"
         android:text="Reset"
+        android:textColor="@color/black"
         android:textAllCaps="false"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -200,13 +202,6 @@
         app:layout_constraintVertical_bias="0.183"
         app:srcCompat="@drawable/baseline_question_mark_24" />
 
-    <Button
-        android:id="@+id/button12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="13dp"
-        tools:layout_editor_absoluteY="8dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

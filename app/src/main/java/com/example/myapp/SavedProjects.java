@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +37,8 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
     ArrayList<SavedProject> saved = new ArrayList<>();
     ScrollView scrollView;
     LinearLayout linearLayout;
-    ImageView back;
+    Button back;
+    TextView name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +51,39 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Users");
+        name = findViewById(R.id.name_saved);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user.getDisplayName()!=null&&!user.getDisplayName().equals(""))
+            name.setText(user.getDisplayName());
+        else {
+            int iend = user.getEmail().indexOf("@");
+            String username = "";
+            if (iend != -1)
+                username = user.getEmail().substring(0, iend);
+            final HashMap<String, String> nameMap = new HashMap<>();
+            String finalUsername = username;
+            final Map<String, String>[] map1 = new Map[]{new HashMap<>()};
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
+                        if (messageSnapshot.getKey().equals(finalUsername)) {
+                            map1[0] = (Map) messageSnapshot.getValue();
+                            name.setText(map1[0].get("name"));
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            name.setText(nameMap.get("name"));
+        }
         String userID = auth.getCurrentUser().getUid();
         DatabaseReference userRef = ref.child(userID);
         final Map<String, String>[] map = new Map[]{new HashMap<>()};
