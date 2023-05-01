@@ -172,7 +172,6 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if(view == procceed){
             String number = sp.getString("number","");
-            Toast.makeText(this, number, Toast.LENGTH_SHORT).show();
             ref2.child(number).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

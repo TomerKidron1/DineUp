@@ -139,16 +139,19 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
             }
         });
         count++;
-        LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
+        LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(450, 140);
         paramstext.setMargins(20,10,20,10);
         person.setLayoutParams(paramstext);
         view.addView(person);
         ImageView dots = new ImageView(this);
+        LinearLayout.LayoutParams paramsdots = new LinearLayout.LayoutParams(50, 100);
+        dots.setLayoutParams(paramsdots);
         dots.setImageResource(R.drawable.twodots);
         view.addView(dots);
         EditText food = new EditText(this);
         food.setHint("Food");
         food.setTextSize(15);
+        food.setGravity(Gravity.CENTER);
         food.setHintTextColor(Color.BLACK);
         food.setLayoutParams(paramstext);
         food.setId(count);
@@ -230,16 +233,19 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                 }
             });
             count++;
-            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
+            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(450, 140);
             paramstext.setMargins(20,10,20,10);
             person.setLayoutParams(paramstext);
             view1.addView(person);
             ImageView dots = new ImageView(this);
+            LinearLayout.LayoutParams paramsdots = new LinearLayout.LayoutParams(50, 100);
+            dots.setLayoutParams(paramsdots);
             dots.setImageResource(R.drawable.twodots);
             view1.addView(dots);
             EditText food = new EditText(this);
             food.setHint("Food");
             food.setTextSize(15);
+            food.setGravity(Gravity.CENTER);
             food.setLayoutParams(paramstext);
             food.setId(count);
             food.setImeOptions(EditorInfo.IME_ACTION_DONE);

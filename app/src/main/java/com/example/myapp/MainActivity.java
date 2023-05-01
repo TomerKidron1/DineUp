@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,10 +45,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText Signinemail,Signinpass;
     TextView forgot,registertext;
     Button signinNext,visiblepass;
-    ImageView regist_radio,google,table;
+    ImageView google,table;
     FirebaseAuth uAuth;
     GoogleSignInClient googleSignInClient;
     NetReciever netReciever = new NetReciever();
+    RadioGroup radio;
 
 
 
@@ -59,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Signinemail = findViewById(R.id.signin_email2);
         Signinpass = findViewById(R.id.signin_password1);
         forgot = findViewById(R.id.forgotpassword);
+        radio = findViewById(R.id.radio_signin_screen);
         signinNext = findViewById(R.id.login_button);
-        regist_radio = findViewById(R.id.radio_register);
         google = findViewById(R.id.google_icon);
         registertext = findViewById(R.id.register_radio_text);
         registertext.setOnClickListener(this);
@@ -90,7 +92,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         forgot.setOnClickListener(this);
-        regist_radio.setOnClickListener(this);
+        radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(i==R.id.signin_radio_reg){
+                    Intent intent = new Intent(MainActivity.this, Register.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                }
+            }
+        });
         uAuth = FirebaseAuth.getInstance();
         signinNext.setOnClickListener(this);
         visiblepass.setOnClickListener(this);
@@ -211,11 +222,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             else
                 Toast.makeText(MainActivity.this,"Enter all Parameters",Toast.LENGTH_LONG).show();
-        }
-        if(view ==regist_radio || view == registertext){
-            Intent intent = new Intent(MainActivity.this, Register.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
         }
         if(view == visiblepass){
                 if(Signinpass.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){

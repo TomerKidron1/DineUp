@@ -1,13 +1,13 @@
 package com.example.myapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -33,7 +33,8 @@ import java.util.Map;
 public class SavedProjects extends AppCompatActivity implements View.OnClickListener {
     FirebaseDatabase database;
     FirebaseAuth auth;
-    DatabaseReference ref;
+    DatabaseReference ref,ref2;
+    FirebaseUser user;
     ArrayList<SavedProject> saved = new ArrayList<>();
     ScrollView scrollView;
     LinearLayout linearLayout;
@@ -49,8 +50,10 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
         scrollView = findViewById(R.id.scrollview5);
         linearLayout = findViewById(R.id.line_layout);
         auth = FirebaseAuth.getInstance();
+        user= auth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Users");
+        ref2 = database.getReference("Users");
         name = findViewById(R.id.name_saved);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user.getDisplayName()!=null&&!user.getDisplayName().equals(""))
@@ -94,8 +97,7 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
                     map[0] = (Map) postSnapshot.getValue();
                     saved.add(new SavedProject(map[0].get("name"),map[0].get("numberofpeople"),map[0].get("category"),map[0].get("date")));
                 }
-                link();
-                return;
+                link(snapshot);
             }
 
             @Override
@@ -104,10 +106,10 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
             }});
 
     }
-    public void link(){
+    public void link(DataSnapshot snapshot){
         for(int i=0;i<saved.size();i++){
             LinearLayout button = new LinearLayout(SavedProjects.this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(900,LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(10,20,10,20);
             params.gravity = Gravity.CENTER;
             button.setLayoutParams(params);
@@ -144,11 +146,49 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
             button.addView(date);
             button.setForegroundGravity(Gravity.CENTER);
             button.setBackgroundResource(R.drawable.saved_proj_tiles);
-
+            int finalI = i;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(SavedProjects.this,""+name.getText().toString(),Toast.LENGTH_SHORT).show();
+                    int rightNumber=0;
+                    for(int j=0;j< snapshot.getChildrenCount();j++)
+                    {
+                        if(snapshot.child(String.valueOf(j)).child("name").getValue().equals(saved.get(finalI).getProject_name()))
+                            rightNumber = j;
+
+                    }
+                    SharedPreferences sp= getSharedPreferences("currentProject",MODE_PRIVATE);
+                    SharedPreferences.Editor spe = sp.edit();
+                    spe.putString("number", String.valueOf(rightNumber));
+                    spe.commit();
+                    ref2=ref2.child(""+user.getUid()).child(""+rightNumber);
+                    ref2.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.hasChild("parameters")){
+                                if(!snapshot.hasChild("people")){
+                                    startActivity(new Intent(SavedProjects.this,TableSettings.class));
+                                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                                }
+                                else{
+                                    startActivity(new Intent(SavedProjects.this,People.class));
+                                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                                }
+
+                            }
+                            else{
+                                startActivity(new Intent(SavedProjects.this,TableSettings.class));
+                                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
                 }
             });
             linearLayout.addView(button);

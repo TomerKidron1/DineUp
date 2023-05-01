@@ -36,6 +36,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Conflicts extends AppCompatActivity implements View.OnClickListener {
     ScrollView scrollView;
@@ -44,13 +46,14 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
     ImageView plus;
     int count;
     FirebaseDatabase database;
-    DatabaseReference ref,refPeople;
+    DatabaseReference ref,refPeople,refConflicts,refConflictsObjects;
     SharedPreferences sp;
     Dialog dialog;
-    ArrayList<String> people;
+    ArrayList<String> people,conflicts;
     FirebaseUser user;
     FirebaseAuth auth;
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<String> adapter,adapter2;
+    Map<String,String> mapConflicts;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,10 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         people = new ArrayList<>();
+        mapConflicts = new HashMap<>();
+        conflicts = new ArrayList<>();
+        refConflictsObjects = database.getReference();
+        refConflicts = database.getReference();
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         refPeople.child("Users").child(user.getUid()).child(sp.getString("number","")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -83,133 +90,166 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
         next.setOnClickListener(this);
         plus.setOnClickListener(this);
         count=0;
-        LinearLayout view=new LinearLayout(this);
-        view.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(10, 10, 10, 10);
-        params.gravity = Gravity.CENTER;
-        view.setLayoutParams(params);
-        view.setGravity(Gravity.CENTER);
-        Button person1 = new Button(this);
-        person1.setBackgroundResource(R.drawable.rectangle_1_shape);
-        person1.setText("Name");
-        person1.setTextSize(15);
-        person1.setId(count);
-        person1.setAllCaps(false);
-        person1.setOnClickListener(new View.OnClickListener() {
+        refConflictsObjects.child("Users").child(user.getUid()).child(sp.getString("number","")).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                dialog = new Dialog(Conflicts.this);
-                dialog.setContentView(R.layout.dialog_searchable_spinner);
-                dialog.getWindow().setLayout(1000,1200);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-                EditText editText=dialog.findViewById(R.id.edit_text_dialog);
-                ListView listView=dialog.findViewById(R.id.list_view_dialog);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!retrieveConflicts(snapshot)){
+                    LinearLayout view=new LinearLayout(Conflicts.this);
+                    view.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(10, 10, 10, 10);
+                    params.gravity = Gravity.CENTER;
+                    view.setLayoutParams(params);
+                    view.setGravity(Gravity.CENTER);
+                    Button person1 = new Button(Conflicts.this);
+                    person1.setBackgroundResource(R.drawable.rectangle_1_shape);
+                    person1.setText("Name");
+                    person1.setTextSize(15);
+                    person1.setId(count);
+                    person1.setAllCaps(false);
+                    count++;
+                    LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
+                    paramstext.setMargins(20,10,20,10);
+                    person1.setLayoutParams(paramstext);
+                    view.addView(person1);
+                    ImageView arrow = new ImageView(Conflicts.this);
+                    arrow.setImageResource(R.drawable.arrow);
+                    view.addView(arrow);
+                    Button person2 = new Button(Conflicts.this);
+                    person2.setBackgroundResource(R.drawable.rectangle_1_shape);
+                    person2.setText("Name");
+                    person2.setTextSize(15);
+                    person2.setLayoutParams(paramstext);
+                    person2.setId(count);
+                    person2.setAllCaps(false);
+                    count++;
+                    view.addView(person2);
+                    linearLayout.addView(view);
+                    person1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog = new Dialog(Conflicts.this);
+                            dialog.setContentView(R.layout.dialog_searchable_spinner);
+                            dialog.getWindow().setLayout(1000,1200);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.show();
+                            EditText editText=dialog.findViewById(R.id.edit_text_dialog);
+                            ListView listView=dialog.findViewById(R.id.list_view_dialog);
 
-                // Initialize array adapter
-                adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
+                            // Initialize array adapter
+                            adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
 
-                // set adapter
-                listView.setAdapter(adapter);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            // set adapter
+                            listView.setAdapter(adapter);
+                            editText.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                    }
+                                }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        adapter.getFilter().filter(s);
-                    }
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    adapter.getFilter().filter(s);
+                                }
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
+                                @Override
+                                public void afterTextChanged(Editable s) {
 
-                    }
-                });
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // when item selected from list
-                        // set selected item on textView
-                        person1.setText(adapter.getItem(position));
+                                }
+                            });
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    // when item selected from list
+                                    // set selected item on textView
+                                    person1.setText(adapter.getItem(position));
+                                    mapConflicts.put(""+person1.getText().toString(),"empty");
 
-                        // Dismiss dialog
-                        dialog.dismiss();
-                    }
-                });
+                                    // Dismiss dialog
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+
+                    person2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog = new Dialog(Conflicts.this);
+                            dialog.setContentView(R.layout.dialog_searchable_spinner);
+                            dialog.getWindow().setLayout(1000,1200);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.show();
+                            EditText editText=dialog.findViewById(R.id.edit_text_dialog);
+                            ListView listView=dialog.findViewById(R.id.list_view_dialog);
+
+                            // Initialize array adapter
+                            adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
+
+                            // set adapter
+                            listView.setAdapter(adapter);
+                            editText.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    adapter.getFilter().filter(s);
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+
+                                }
+                            });
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    // when item selected from list
+                                    // set selected item on textView
+                                    person2.setText(adapter.getItem(position));
+                                    mapConflicts.replace(""+person1.getText().toString(),""+person2.getText().toString());
+                                    // Dismiss dialog
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
+                else{
+                    retrieveConflicts(snapshot);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
-        count++;
-        LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
-        paramstext.setMargins(20,10,20,10);
-        person1.setLayoutParams(paramstext);
-        view.addView(person1);
-        ImageView arrow = new ImageView(this);
-        arrow.setImageResource(R.drawable.arrow);
-        view.addView(arrow);
-        Button person2 = new Button(this);
-        person2.setBackgroundResource(R.drawable.rectangle_1_shape);
-        person2.setText("Name");
-        person2.setTextSize(15);
-        person2.setLayoutParams(paramstext);
-        person2.setId(count);
-        person2.setAllCaps(false);
-        count++;
-        person2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog = new Dialog(Conflicts.this);
-                dialog.setContentView(R.layout.dialog_searchable_spinner);
-                dialog.getWindow().setLayout(1000,1200);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-                EditText editText=dialog.findViewById(R.id.edit_text_dialog);
-                ListView listView=dialog.findViewById(R.id.list_view_dialog);
 
-                // Initialize array adapter
-                adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
-
-                // set adapter
-                listView.setAdapter(adapter);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        adapter.getFilter().filter(s);
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // when item selected from list
-                        // set selected item on textView
-                        person2.setText(adapter.getItem(position));
-
-                        // Dismiss dialog
-                        dialog.dismiss();
-                    }
-                });
-            }
-        });
-        view.addView(person2);
-        linearLayout.addView(view);
     }
 
     private void retrieveObjects(DataSnapshot snapshot) {
         for(int i=0;i<snapshot.child("people").getChildrenCount();i++){
             people.add((String) snapshot.child("people").child("person "+(i+1)).getValue());
         }
+    }
+    private boolean retrieveConflicts(DataSnapshot snapshot) {
+        /*if(!snapshot.child("conflicts").exists()){
+            return false;
+        }
+        for (DataSnapshot postSnapshot: snapshot.child("conflicts").getChildren()) {
+            Map<String,String> map  = (Map) postSnapshot.getValue();
+            Toast.makeText(this, ""+map, Toast.LENGTH_SHORT).show();
+        }
+        for(int i=0;i<snapshot.child("conflicts").getChildrenCount();i++){
+            //addView(snapshot.child("conflicts").getChildren());
+        }
+        return true;*/
+        return false;
     }
 
     @Override
@@ -218,28 +258,37 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
             Button test = findViewById(0);
             String name="";
             boolean flag = true;
-
             if(!test.getText().toString().equals("Name"))
                 name=test.getText().toString();
-            for(int i=0; i<count||flag == false; i++){
+            for(int i=0; i<count&&flag == true; i++){
                 Button button = findViewById(i);
-                Toast.makeText(this, ""+button.getText().toString(), Toast.LENGTH_SHORT).show();
-                if(button.getText().toString().equals("Name")){
+                if(button.getText().equals("Name")){
                     Toast.makeText(this, "There are empty names", Toast.LENGTH_SHORT).show();
                     flag = false;
                 }
                 else {
-                    if(name.equals(button.getText().toString())){
+                    if(i!=0&&name.equals(button.getText().toString())&&i%2!=0){
                         Toast.makeText(this, "There is 1 person in different sides of conflict", Toast.LENGTH_SHORT).show();
+                        flag = false;
                     }
                 }
                 name = button.getText().toString();
             }
+
             if(flag){
+                String name1="";
+                for(int i=0; i<count&&flag == true; i++){
+                    Button button1 = findViewById(i);
+                    if(i!=0&&i%2!=0){
+                        mapConflicts.put(name1, button1.getText().toString());
+                        Toast.makeText(this, ""+name1+" + "+button1.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                    name1 = button1.getText().toString();
+                }
+                refConflicts.child("Users").child(user.getUid()).child(sp.getString("number","")).child("conflicts").setValue(mapConflicts);
                 startActivity(new Intent(this,Food.class));
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
-            Toast.makeText(this, ""+count, Toast.LENGTH_SHORT).show();
         }
         if(view==plus){
             LinearLayout view1=new LinearLayout(this);

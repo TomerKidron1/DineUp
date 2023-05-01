@@ -47,7 +47,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     ImageButton saved_projects;
     Button Birthday,BBQ,Dinner,Lunch,BarMitzva,settings,Custom;
     FirebaseDatabase database;
-    DatabaseReference ref,ref2;
+    DatabaseReference ref,ref2,ref3;
     FirebaseAuth auth;
     ArrayList<SavedProject> saved = new ArrayList<>();
     LinearLayout linearLayout;
@@ -67,6 +67,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Authentication");
         ref2 = database.getReference("Users");
+        ref3 = database.getReference("Users");
         sp1 = getSharedPreferences("categoryPref",MODE_PRIVATE);
         editor1 = sp1.edit();
         SharedPreferences sp = getSharedPreferences("User", MODE_PRIVATE);
@@ -188,15 +189,36 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                                     rightNumber = j;
 
                             }
-                            Toast.makeText(MainScreen.this, ""+snapshot.child(String.valueOf(rightNumber)).child("name").getValue(), Toast.LENGTH_SHORT).show();
                             SharedPreferences sp= getSharedPreferences("currentProject",MODE_PRIVATE);
                             SharedPreferences.Editor spe = sp.edit();
                             spe.putString("number", String.valueOf(rightNumber));
                             spe.commit();
-                            startActivity(new Intent(MainScreen.this,TableSettings.class));
-                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            ref3=ref3.child(""+user.getUid()).child(""+rightNumber);
+                            ref3.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.hasChild("parameters")){
+                                        if(!snapshot.hasChild("people")){
+                                            startActivity(new Intent(MainScreen.this,TableSettings.class));
+                                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                                        }
+                                        else{
+                                            startActivity(new Intent(MainScreen.this,People.class));
+                                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                                        }
 
+                                    }
+                                    else{
+                                        startActivity(new Intent(MainScreen.this,TableSettings.class));
+                                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                                    }
+                                }
 
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }
                     });
                     linearLayout.addView(button);

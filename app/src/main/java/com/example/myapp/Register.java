@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +47,13 @@ import java.util.Map;
 public class Register extends AppCompatActivity implements View.OnClickListener {
     EditText registName,registEmail,registPass;
     Button registNext,passvisible;
-    ImageView google_icon,moveToSignIn,table;
+    ImageView google_icon,table;
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference myref;
     TextView signintext;
     GoogleSignInClient googleSignInClient;
+    RadioGroup radio;
 
 
     @Override
@@ -64,7 +66,17 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         registNext = findViewById(R.id.register_button);
         passvisible = findViewById(R.id.visible_button_regist);
         google_icon = findViewById(R.id.google_icon2);
-        moveToSignIn = findViewById(R.id.radio_signin2);
+        radio = findViewById(R.id.radio_register);
+        radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(i == R.id.register_radio_sign){
+                    Intent intent = new Intent(Register.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                }
+            }
+        });
         signintext = findViewById(R.id.signin_radio_text2);
         database = FirebaseDatabase.getInstance();
         myref = database.getReference("Authentication");
@@ -78,7 +90,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 table.startAnimation(animation);
             }
         });
-        moveToSignIn.setOnClickListener(this);
         passvisible.setOnClickListener(this);
         GoogleSignInOptions googleSignInOptions=new GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_SIGN_IN
@@ -177,12 +188,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
             }
             registPass.setSelection(registPass.length());
-
-        }
-        if(view == moveToSignIn || view == signintext){
-            Intent intent = new Intent(Register.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
 
         }
         if(view == registNext){

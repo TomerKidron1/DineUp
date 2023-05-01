@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SplashScreen extends AppCompatActivity {
     ProgressBar pb;
     NetReciever netReciever = new NetReciever();
-    FirebaseDatabase database;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +24,7 @@ public class SplashScreen extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("User", MODE_PRIVATE);
         String restoredEmail = sp.getString("email", "");
         if(Common.isConnectedToInternet(SplashScreen.this)) {
-            database = FirebaseDatabase.getInstance();
+            FirebaseDatabase.getInstance().getReference().keepSynced(true);
             delay(restoredEmail);
         }
 
