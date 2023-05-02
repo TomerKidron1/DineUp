@@ -33,7 +33,7 @@ import java.util.Map;
 public class SavedProjects extends AppCompatActivity implements View.OnClickListener {
     FirebaseDatabase database;
     FirebaseAuth auth;
-    DatabaseReference ref,ref2;
+    DatabaseReference ref,ref2,ref3;
     FirebaseUser user;
     ArrayList<SavedProject> saved = new ArrayList<>();
     ScrollView scrollView;
@@ -54,6 +54,7 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Users");
         ref2 = database.getReference("Users");
+        ref3 = database.getReference("Authentication");
         name = findViewById(R.id.name_saved);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user.getDisplayName()!=null&&!user.getDisplayName().equals(""))
@@ -66,7 +67,7 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
             final HashMap<String, String> nameMap = new HashMap<>();
             String finalUsername = username;
             final Map<String, String>[] map1 = new Map[]{new HashMap<>()};
-            ref.addValueEventListener(new ValueEventListener() {
+            ref3.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot messageSnapshot : snapshot.getChildren()) {

@@ -195,8 +195,9 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
 
                 }
             });
-            startActivity(new Intent(this,Questions.class));
+            startActivity(new Intent(TableSettings.this,Questions.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish();
 
         }
         if(view == reset){

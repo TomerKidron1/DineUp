@@ -193,7 +193,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                             SharedPreferences.Editor spe = sp.edit();
                             spe.putString("number", String.valueOf(rightNumber));
                             spe.commit();
-                            ref3=ref3.child(""+user.getUid()).child(""+rightNumber);
+                            startActivity(new Intent(MainScreen.this,TableSettings.class));
+                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                            /*ref3=ref3.child(""+user.getUid()).child(""+rightNumber);
                             ref3.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -201,6 +203,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                                         if(!snapshot.hasChild("people")){
                                             startActivity(new Intent(MainScreen.this,TableSettings.class));
                                             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                                            finish();
                                         }
                                         else{
                                             startActivity(new Intent(MainScreen.this,People.class));
@@ -218,12 +221,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                                 public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
-                            });
+                            });*/
                         }
                     });
                     linearLayout.addView(button);
                 }
-                return;
             }
 
             @Override

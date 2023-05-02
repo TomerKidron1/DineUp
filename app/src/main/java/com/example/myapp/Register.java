@@ -250,6 +250,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             registPass.setSelection(registPass.length());
 
         }
+        if(view == signintext){
+            Intent intent = new Intent(Register.this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+        }
 
     }
     public boolean checkCharacters(String string, char Char){

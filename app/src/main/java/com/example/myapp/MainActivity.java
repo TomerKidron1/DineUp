@@ -198,6 +198,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 builder.show();
             }
         }
+        if(view == registertext){
+            Intent intent = new Intent(MainActivity.this,Register.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+        }
         if(view == signinNext){
             if(!Signinpass.getText().toString().equals("")&& !Signinemail.getText().toString().equals("")) {
                 uAuth.signInWithEmailAndPassword(Signinemail.getText().toString().trim(), Signinpass.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
