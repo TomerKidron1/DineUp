@@ -25,10 +25,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".MainActivity"
@@ -64,7 +62,14 @@
         <activity
             android:name=".People"
             android:exported="true"></activity>
-        <activity android:name=".Conflicts"></activity>
+        <activity
+            android:name=".Conflicts"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".Navigation"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
