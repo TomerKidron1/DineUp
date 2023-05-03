@@ -1,6 +1,7 @@
 package com.example.myapp;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 
 public class Food extends AppCompatActivity implements View.OnClickListener {
     ScrollView scrollView;
-    Button next;
+    Button next,navigate;
     ImageView plus;
     LinearLayout linearLayout;
     int count;
@@ -57,6 +58,8 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
         scrollView = findViewById(R.id.scroll_view_food);
         next = findViewById(R.id.next_food);
         plus = findViewById(R.id.plus_food);
+        navigate = findViewById(R.id.navigate_food);
+        navigate.setOnClickListener(this);
         linearLayout = findViewById(R.id.ll_food);
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -170,6 +173,10 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
     }
     @Override
     public void onClick(View view) {
+        if(view == navigate){
+            startActivity(new Intent(Food.this,Navigation.class));
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        }
         if(view ==next){
 
         }

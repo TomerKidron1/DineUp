@@ -62,4 +62,21 @@
         app:layout_constraintTop_toTopOf="parent" >
 
     </ListView>
+
+    <Button
+        android:id="@+id/navigate_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Navigate"
+        android:textColor="@color/black"
+        android:fontFamily="@font/inter_bold"
+        android:background="@drawable/rounded_table_white"
+        android:textAllCaps="false"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next_people"
+        app:layout_constraintHorizontal_bias="0.632"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.916" />
 </androidx.constraintlayout.widget.ConstraintLayout>

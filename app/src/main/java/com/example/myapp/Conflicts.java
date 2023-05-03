@@ -42,7 +42,7 @@ import java.util.Map;
 public class Conflicts extends AppCompatActivity implements View.OnClickListener {
     ScrollView scrollView;
     LinearLayout linearLayout;
-    Button next;
+    Button next,navigate;
     ImageView plus;
     int count;
     FirebaseDatabase database;
@@ -89,6 +89,8 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
         plus=findViewById(R.id.plus_conflicts);
         next.setOnClickListener(this);
         plus.setOnClickListener(this);
+        navigate = findViewById(R.id.navigation_conflicts);
+        navigate.setOnClickListener(this);
         count=0;
         refConflictsObjects.child("Users").child(user.getUid()).child(sp.getString("number","")).addValueEventListener(new ValueEventListener() {
             @Override
@@ -412,6 +414,10 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
             });
             view1.addView(person2);
             linearLayout.addView(view1);
+        }
+        if(view == navigate){
+            startActivity(new Intent(Conflicts.this,Navigation.class));
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
     }
 }

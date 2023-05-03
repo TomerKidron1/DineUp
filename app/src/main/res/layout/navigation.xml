@@ -30,7 +30,6 @@
         android:text="What you already Set Up:"
         android:textColor="@color/black"
         android:textSize="16dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +37,7 @@
         app:layout_constraintVertical_bias="0.059" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayout_nav"
         android:layout_width="211dp"
         android:layout_height="202dp"
         android:layout_marginTop="14dp"
@@ -66,6 +65,7 @@
                 android:textSize="12dp" />
 
             <ImageView
+                android:id="@+id/table_nav_iv"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginLeft="55dp"
@@ -89,6 +89,7 @@
                 android:textSize="12dp" />
 
             <ImageView
+                android:id="@+id/questions_nav_iv"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginLeft="18dp"
@@ -112,6 +113,7 @@
                 android:textSize="12dp" />
 
             <ImageView
+                android:id="@+id/people_nav_iv"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginLeft="42dp"
@@ -135,6 +137,7 @@
                 android:textSize="12dp" />
 
             <ImageView
+                android:id="@+id/conflicts_nav_iv"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginLeft="17dp"
@@ -158,6 +161,7 @@
                 android:textSize="12dp" />
 
             <ImageView
+                android:id="@+id/food_nav_iv"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginLeft="58dp"
@@ -181,6 +185,7 @@
                 android:textSize="12dp" />
 
             <ImageView
+                android:id="@+id/wrapup_nav_iv"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginLeft="107dp"
@@ -190,7 +195,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/table_nav_bt"
         android:layout_width="72dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_table_white"
@@ -206,7 +211,7 @@
         app:layout_constraintVertical_bias="0.592" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/questions_nav_bt"
         android:layout_width="72dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_table_white"
@@ -223,7 +228,7 @@
         app:layout_constraintVertical_bias="0.591" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/people_nav_bt"
         android:layout_width="72dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_table_white"
@@ -240,7 +245,7 @@
         app:layout_constraintVertical_bias="0.591" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/conflicts_nav_bt"
         android:layout_width="72dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_table_white"
@@ -257,7 +262,7 @@
         app:layout_constraintVertical_bias="0.675" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/food_nav_bt"
         android:layout_width="72dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_table_white"
@@ -274,7 +279,7 @@
         app:layout_constraintVertical_bias="0.674" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/wrapup_nav_bt"
         android:layout_width="72dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_table_white"
@@ -291,7 +296,7 @@
         app:layout_constraintVertical_bias="0.674" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/home_nav_bt"
         android:layout_width="93dp"
         android:layout_height="43dp"
         android:background="@drawable/home_button"

@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class People extends AppCompatActivity implements View.OnClickListener {
     ListView people_list;
-    Button next;
+    Button next,navigate;
     ImageView plus;
     ArrayList<String> arrayList;
     ArrayAdapter<String> adapter;
@@ -73,6 +73,8 @@ public class People extends AppCompatActivity implements View.OnClickListener {
         });
         next = findViewById(R.id.next_people);
         plus = findViewById(R.id.plus_people);
+        navigate = findViewById(R.id.navigate_people);
+        navigate.setOnClickListener(this);
         plus.setOnClickListener(this);
         next.setOnClickListener(this);
         ref.child(user.getUid()).child(sp.getString("number","")).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -178,6 +180,10 @@ public class People extends AppCompatActivity implements View.OnClickListener {
            }
 
 
+        }
+        if(view == navigate){
+            startActivity(new Intent(People.this,Navigation.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
 }

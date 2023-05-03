@@ -31,7 +31,7 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
     RadioGroup radioGroup3;
     SharedPreferences sp,spNumber;
     SharedPreferences.Editor editor;
-    Button next;
+    Button next,navigate;
     FirebaseDatabase database;
     FirebaseAuth auth;
     FirebaseUser user;
@@ -46,6 +46,8 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
         radioGroup3 = findViewById(R.id.radio3);
         next = findViewById(R.id.next_questions);
         next.setOnClickListener(this);
+        navigate = findViewById(R.id.navigate_questions);
+        navigate.setOnClickListener(this);
         arraylist = new ArrayList<>();
         sp = getSharedPreferences("questions", MODE_PRIVATE);
         editor = sp.edit();
@@ -176,6 +178,10 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
             else if(sp.getString("answer3","").equals("yes")){
                 startActivity(new Intent(Questions.this,Food.class));
             }
+        }
+        if(view == navigate){
+            startActivity(new Intent(Questions.this,Navigation.class));
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
     }
 }

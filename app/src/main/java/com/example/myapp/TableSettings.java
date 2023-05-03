@@ -43,7 +43,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     ImageView question;
     ImageView popup;
     Button reset;
-    Button procceed;
+    Button procceed,navigate;
     FirebaseDatabase database;
     DatabaseReference ref;
     DatabaseReference ref2;
@@ -62,6 +62,8 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         reset= findViewById(R.id.reset_button);
         reset.setOnClickListener(this);
         auth = FirebaseAuth.getInstance();
+        navigate = findViewById(R.id.navigate_table);
+        navigate.setOnClickListener(this);
         question = findViewById(R.id.question);
         question.setOnClickListener(this);
         database = FirebaseDatabase.getInstance();
@@ -617,6 +619,10 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         }
         if(view == popup){
             showPopUpMenu(view);
+        }
+        if(view == navigate){
+            startActivity(new Intent(TableSettings.this,Navigation.class));
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
     }
     public Map<String,Double> showPopUpCustom(){
