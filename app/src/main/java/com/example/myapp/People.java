@@ -161,6 +161,7 @@ public class People extends AppCompatActivity implements View.OnClickListener {
             builder.show();
         }
         if(view == next){
+            Toast.makeText(this, ""+sp1.getString("answer2",""), Toast.LENGTH_SHORT).show();
             String userId = user.getUid();
             Map<String,String> map = new HashMap<>();
            for(int i=0;i<arrayList.size();i++){

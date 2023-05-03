@@ -240,18 +240,18 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
         }
     }
     private boolean retrieveConflicts(DataSnapshot snapshot) {
-        /*if(!snapshot.child("conflicts").exists()){
+        if(!snapshot.child("conflicts").exists()){
             return false;
         }
-        for (DataSnapshot postSnapshot: snapshot.child("conflicts").getChildren()) {
-            Map<String,String> map  = (Map) postSnapshot.getValue();
-            Toast.makeText(this, ""+map, Toast.LENGTH_SHORT).show();
-        }
+        Map<String,String> mapConflictsObjects = new HashMap<>();
         for(int i=0;i<snapshot.child("conflicts").getChildrenCount();i++){
-            //addView(snapshot.child("conflicts").getChildren());
+            for(int j=0;j<people.size();j++){
+                if(snapshot.child("conflicts").child(people.get(j)).exists()){
+                    mapConflictsObjects.put(snapshot.child("conflicts").child(people.get(j)).getKey(), (String) snapshot.child("conflicts").child(people.get(j)).getValue());
+                }
+            }
         }
-        return true;*/
-        return false;
+        return true;
     }
 
     @Override
@@ -278,8 +278,9 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
             }
 
             if(flag){
+                // לתקן בדחיפות שום דבר לא עובד
                 String name1="";
-                for(int i=0; i<count&&flag == true; i++){
+                for(int i=0; i<count; i++){
                     Button button1 = findViewById(i);
                     if(i!=0&&i%2!=0){
                         mapConflicts.put(name1, button1.getText().toString());
@@ -288,6 +289,13 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     name1 = button1.getText().toString();
                 }
                 refConflicts.child("Users").child(user.getUid()).child(sp.getString("number","")).child("conflicts").setValue(mapConflicts);
+                Map<String,String> mapOrder = new HashMap<>();
+                ArrayList<String> keyset = new ArrayList<>(mapConflicts.keySet());
+                ArrayList<String> valuesset = new ArrayList<>(mapConflicts.values());
+                for(int k=0;k<mapConflicts.size();k++){
+                    mapOrder.put(""+(k+1),keyset.get(k)+"+"+valuesset.get(k));
+                }
+                refConflicts.child("Users").child(user.getUid()).child(sp.getString("number","")).child("conflicts").child("order").setValue(mapOrder);
                 startActivity(new Intent(this,Food.class));
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
