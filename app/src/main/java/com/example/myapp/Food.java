@@ -1,6 +1,8 @@
 package com.example.myapp;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,6 +12,8 @@ import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -20,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
@@ -49,6 +54,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
     ArrayList<String> people;
     Dialog dialog;
     ArrayAdapter<String> adapter;
+    ArrayList<Integer> removedIds;
 
 
     @Override
@@ -65,6 +71,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         people = new ArrayList<>();
+        removedIds = new ArrayList<>();
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         ref = database.getReference();
         ref2 = database.getReference();
@@ -84,13 +91,13 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
         next.setOnClickListener(this);
         plus.setOnClickListener(this);
         count=0;
-        LinearLayout view=new LinearLayout(this);
-        view.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout view1=new LinearLayout(this);
+        view1.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(10, 10, 10, 10);
         params.gravity = Gravity.CENTER;
-        view.setLayoutParams(params);
-        view.setGravity(Gravity.CENTER);
+        view1.setLayoutParams(params);
+        view1.setGravity(Gravity.CENTER);
         Button person = new Button(this);
         person.setBackgroundResource(R.drawable.rectangle_1_shape);
         person.setText("Name");
@@ -146,12 +153,12 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
         LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(450, 140);
         paramstext.setMargins(20,10,20,10);
         person.setLayoutParams(paramstext);
-        view.addView(person);
+        view1.addView(person);
         ImageView dots = new ImageView(this);
         LinearLayout.LayoutParams paramsdots = new LinearLayout.LayoutParams(50, 100);
         dots.setLayoutParams(paramsdots);
         dots.setImageResource(R.drawable.twodots);
-        view.addView(dots);
+        view1.addView(dots);
         EditText food = new EditText(this);
         food.setHint("Food");
         food.setTextSize(15);
@@ -163,14 +170,95 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
         food.setImeOptions(EditorInfo.IME_ACTION_DONE);
         food.setSingleLine();
         count++;
-        view.addView(food);
-        linearLayout.addView(view);
+        view1.addView(food);
+        linearLayout.addView(view1);
+        person.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                PopupMenu popup = new PopupMenu(Food.this, view);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.conflicts_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.delete_conflict:
+                                AlertDialog.Builder builder= new AlertDialog.Builder(Food.this);
+                                builder.setTitle("Are you sure you want to delete?");
+                                builder.setCancelable(true);
+                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        linearLayout.removeView(view1);
+                                        removedIds.add(person.getId());
+                                        count=count-2;
+                                    }
+                                });
+                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                builder.show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.show();
+                return false;
+            }
+        });
+        food.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                PopupMenu popup = new PopupMenu(Food.this, view);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.conflicts_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.delete_conflict:
+                                AlertDialog.Builder builder= new AlertDialog.Builder(Food.this);
+                                builder.setTitle("Are you sure you want to delete?");
+                                builder.setCancelable(true);
+                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        linearLayout.removeView(view);
+                                        removedIds.add(person.getId());
+                                        count=count-2;
+                                    }
+                                });
+                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                builder.show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.show();
+                return false;
+            }
+        });
 
     }
     private void retrieveObjects(DataSnapshot snapshot) {
         for(int i=0;i<snapshot.child("people").getChildrenCount();i++){
             people.add((String) snapshot.child("people").child("person "+(i+1)).getValue());
         }
+    }
+    private void retrieveList(DataSnapshot snapshot){
+
     }
     @Override
     public void onClick(View view) {
@@ -263,6 +351,84 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
             count++;
             view1.addView(food);
             linearLayout.addView(view1);
+            person.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    PopupMenu popup = new PopupMenu(Food.this, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.conflicts_menu, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.delete_conflict:
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(Food.this);
+                                    builder.setTitle("Are you sure you want to delete?");
+                                    builder.setCancelable(true);
+                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            linearLayout.removeView(view1);
+                                            removedIds.add(person.getId());
+                                            count=count-2;
+                                        }
+                                    });
+                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                                    builder.show();
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        }
+                    });
+                    popup.show();
+                    return false;
+                }
+            });
+            food.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    PopupMenu popup = new PopupMenu(Food.this, view);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.conflicts_menu, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.delete_conflict:
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(Food.this);
+                                    builder.setTitle("Are you sure you want to delete?");
+                                    builder.setCancelable(true);
+                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            linearLayout.removeView(view1);
+                                            removedIds.add(person.getId());
+                                            count=count-2;
+                                        }
+                                    });
+                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                                    builder.show();
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        }
+                    });
+                    popup.show();
+                    return false;
+                }
+            });
         }
     }
 }

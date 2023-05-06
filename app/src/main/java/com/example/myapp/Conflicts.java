@@ -109,13 +109,13 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!retrieveConflicts(snapshot)){
-                    LinearLayout view=new LinearLayout(Conflicts.this);
-                    view.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout view1=new LinearLayout(Conflicts.this);
+                    view1.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     params.setMargins(10, 10, 10, 10);
                     params.gravity = Gravity.CENTER;
-                    view.setLayoutParams(params);
-                    view.setGravity(Gravity.CENTER);
+                    view1.setLayoutParams(params);
+                    view1.setGravity(Gravity.CENTER);
                     Button person1 = new Button(Conflicts.this);
                     person1.setBackgroundResource(R.drawable.rectangle_1_shape);
                     person1.setText("Name");
@@ -126,10 +126,10 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
                     paramstext.setMargins(20,10,20,10);
                     person1.setLayoutParams(paramstext);
-                    view.addView(person1);
+                    view1.addView(person1);
                     ImageView arrow = new ImageView(Conflicts.this);
                     arrow.setImageResource(R.drawable.arrow);
-                    view.addView(arrow);
+                    view1.addView(arrow);
                     Button person2 = new Button(Conflicts.this);
                     person2.setBackgroundResource(R.drawable.rectangle_1_shape);
                     person2.setText("Name");
@@ -138,8 +138,8 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     person2.setId(count);
                     person2.setAllCaps(false);
                     count++;
-                    view.addView(person2);
-                    linearLayout.addView(view);
+                    view1.addView(person2);
+                    linearLayout.addView(view1);
                     person1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -175,12 +175,9 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    // when item selected from list
-                                    // set selected item on textView
+
                                     person1.setText(adapter.getItem(position));
                                     mapConflicts.put(""+person1.getText().toString(),"empty");
-
-                                    // Dismiss dialog
                                     dialog.dismiss();
                                 }
                             });
@@ -204,7 +201,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
 
-                                                    linearLayout.removeView(view);
+                                                    linearLayout.removeView(view1);
                                                     count=count-2;
                                                     removedIds.add(person1.getId());
 
@@ -290,7 +287,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                                             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
-                                                    linearLayout.removeView(view);
+                                                    linearLayout.removeView(view1);
                                                     count=count-2;
                                                     removedIds.add(person1.getId());
                                                 }
