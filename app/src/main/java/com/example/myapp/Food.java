@@ -44,7 +44,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
     FirebaseDatabase database;
     FirebaseAuth auth;
     FirebaseUser user;
-    DatabaseReference ref;
+    DatabaseReference ref,ref2;
     SharedPreferences sp;
     ArrayList<String> people;
     Dialog dialog;
@@ -67,6 +67,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
         people = new ArrayList<>();
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         ref = database.getReference();
+        ref2 = database.getReference();
         ref.child("Users").child(user.getUid()).child(sp.getString("number","")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
