@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class WrapUp extends AppCompatActivity implements View.OnClickListener {
     ImageView table,questions,people,conflicts,food,wrapup;
     FirebaseDatabase database;
@@ -27,6 +32,7 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
     DatabaseReference ref;
     SharedPreferences sp;
     Button navigate,done;
+    ArrayList<String> whatsdone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,31 +52,72 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
         ref = database.getReference();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        whatsdone = new ArrayList<>();
+        Map<String,String> map = new HashMap<>();
+        map.put("wraped up","yes");
+        ref.child("Users").child(user.getUid()).child(sp.getString("number","")).setValue(map);
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         ref.child("Users").child(user.getUid()).child(sp.getString("number","")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.hasChild("parameters")){
+
+                if(snapshot.hasChild("parameters")) {
                     table.setImageResource(R.drawable.checkmark1);
+                    whatsdone.add("yes");
                 }
-                else
+                else {
                     table.setImageResource(R.drawable.x);
-                if(snapshot.hasChild("questions"))
+                    whatsdone.add("no");
+
+                }
+                if(snapshot.hasChild("questions")) {
                     questions.setImageResource(R.drawable.checkmark1);
-                else
+                    whatsdone.add("yes");
+
+                }
+                else {
                     questions.setImageResource(R.drawable.x);
-                if(snapshot.hasChild("people"))
+                    whatsdone.add("no");
+
+                }
+                if(snapshot.hasChild("people")) {
                     people.setImageResource(R.drawable.checkmark1);
-                else
+                    whatsdone.add("yes");
+
+                }
+                else {
                     people.setImageResource(R.drawable.x);
-                if(snapshot.hasChild("conflicts"))
+                    whatsdone.add("no");
+
+                }
+                if(snapshot.hasChild("conflicts")) {
                     conflicts.setImageResource(R.drawable.checkmark1);
-                else
+                    whatsdone.add("yes");
+
+                }
+                else {
                     conflicts.setImageResource(R.drawable.x);
-                if(snapshot.hasChild("food"))
+                    whatsdone.add("no");
+
+                }
+                if(snapshot.hasChild("food")) {
                     food.setImageResource(R.drawable.checkmark1);
-                else
+                    whatsdone.add("yes");
+
+                }
+                else {
                     food.setImageResource(R.drawable.x);
+                    whatsdone.add("no");
+
+                }
+                if(snapshot.hasChild("wrapup up")) {
+                    wrapup.setImageResource(R.drawable.checkmark1);
+                    whatsdone.add("yes");
+                }
+                else {
+                    wrapup.setImageResource(R.drawable.x);
+                    whatsdone.add("no");
+                }
             }
 
             @Override
@@ -87,7 +134,18 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
             overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
         if(view == done){
+            boolean flag=true;
+            for(int i=0;i<whatsdone.size()&&flag==true;i++){
+                if(whatsdone.get(i).equals("no")){
+                    flag=false;
+                }
+            }
+            if(flag==false){
+                Toast.makeText(this, "You havent completed all your tasks", Toast.LENGTH_LONG).show();
+            }
+            else{
 
+            }
         }
 
     }
