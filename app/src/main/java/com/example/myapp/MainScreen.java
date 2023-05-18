@@ -193,35 +193,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                             SharedPreferences.Editor spe = sp.edit();
                             spe.putString("number", String.valueOf(rightNumber));
                             spe.commit();
-                            startActivity(new Intent(MainScreen.this,TableSettings.class));
+                            startActivity(new Intent(MainScreen.this,Navigation.class));
                             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                            /*ref3=ref3.child(""+user.getUid()).child(""+rightNumber);
-                            ref3.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if(snapshot.hasChild("parameters")){
-                                        if(!snapshot.hasChild("people")){
-                                            startActivity(new Intent(MainScreen.this,TableSettings.class));
-                                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                                            finish();
-                                        }
-                                        else{
-                                            startActivity(new Intent(MainScreen.this,People.class));
-                                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                                        }
 
-                                    }
-                                    else{
-                                        startActivity(new Intent(MainScreen.this,TableSettings.class));
-                                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });*/
                         }
                     });
                     linearLayout.addView(button);

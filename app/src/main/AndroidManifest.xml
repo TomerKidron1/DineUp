@@ -70,6 +70,9 @@
             android:name=".Navigation"
             android:exported="true">
         </activity>
+        <activity android:name=".WrapUp"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
