@@ -165,7 +165,7 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
         }
         if(view == wrapupBt){
             startActivity(new Intent(Navigation.this,WrapUp.class));
-            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         }
     }
     private void showPopUp(String what){

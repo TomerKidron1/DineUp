@@ -89,6 +89,9 @@
         <activity android:name=".Final"
             android:exported="true">
         </activity>
+        <activity android:name=".PeopleFoodFinal"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

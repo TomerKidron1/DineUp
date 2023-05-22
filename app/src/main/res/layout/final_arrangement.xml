@@ -63,7 +63,7 @@
         android:id="@+id/nav_final"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/nextbutton2"
+        android:background="@drawable/blue_color_buttons"
         android:fontFamily="@font/inter_bold"
         android:padding="10dp"
         android:text="Back To\nNavigation"
@@ -81,6 +81,7 @@
         android:id="@+id/share_final"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -88,4 +89,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.911"
         app:srcCompat="@drawable/share_icon" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

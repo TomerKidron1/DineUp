@@ -21,4 +21,5 @@
 	<color name="not_so_black">#FF252525</color>
 	<color name="appbackground3">#AFDAD5</color>
     <color name="transperent" />
+	<color name="frame_color">#4B4A4A</color>
 </resources>

@@ -93,14 +93,18 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
                     whatsdone.add("no");
 
                 }
-                if(snapshot.hasChild("conflicts")||sp2.getString("answer2","").equals("no")) {
+                if(snapshot.hasChild("conflicts")) {
                     conflicts.setImageResource(R.drawable.checkmark1);
                     whatsdone.add("yes");
 
                 }
                 else {
                     conflicts.setImageResource(R.drawable.x);
-                    whatsdone.add("no");
+                    if(sp2.getString("answer2","").equals("no")) {
+                        whatsdone.add("yes");
+                    }
+                    else
+                        whatsdone.add("no");
 
                 }
                 if(snapshot.hasChild("food")) {
@@ -147,7 +151,7 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
                 Toast.makeText(this, "You havent completed all your tasks", Toast.LENGTH_LONG).show();
             }
             else{
-
+                startActivity(new Intent(WrapUp.this,Final.class));
             }
         }
 
