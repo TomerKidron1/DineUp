@@ -81,7 +81,6 @@ public class People extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getChildrenCount()>5) {
-                    Toast.makeText(People.this, ""+snapshot.child("people").getChildrenCount(), Toast.LENGTH_SHORT).show();
                     retrieveObjects(snapshot);
                 }
             }
@@ -161,7 +160,6 @@ public class People extends AppCompatActivity implements View.OnClickListener {
             builder.show();
         }
         if(view == next){
-            Toast.makeText(this, ""+sp1.getString("answer2",""), Toast.LENGTH_SHORT).show();
             String userId = user.getUid();
             Map<String,String> map = new HashMap<>();
            for(int i=0;i<arrayList.size();i++){

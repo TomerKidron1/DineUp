@@ -25,7 +25,7 @@
         android:id="@+id/maincicrle"
         android:layout_width="361dp"
         android:layout_height="522dp"
-
+        android:layout_marginLeft="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.02"

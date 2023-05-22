@@ -29,10 +29,11 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
     FirebaseDatabase database;
     FirebaseAuth auth;
     FirebaseUser user;
-    DatabaseReference ref;
-    SharedPreferences sp;
+    DatabaseReference ref,ref2;
+    SharedPreferences sp,sp2;
     Button navigate,done;
     ArrayList<String> whatsdone;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,13 +51,15 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
         wrapup = findViewById(R.id.wrapup_wrap_iv);
         database = FirebaseDatabase.getInstance();
         ref = database.getReference();
+        ref2 = database.getReference();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         whatsdone = new ArrayList<>();
+        sp = getSharedPreferences("currentProject",MODE_PRIVATE);
+        sp2 = getSharedPreferences("questions",MODE_PRIVATE);
         Map<String,String> map = new HashMap<>();
         map.put("wraped up","yes");
-        ref.child("Users").child(user.getUid()).child(sp.getString("number","")).setValue(map);
-        sp = getSharedPreferences("currentProject",MODE_PRIVATE);
+        ref2.child("Users").child(user.getUid()).child(sp.getString("number","")).child("wrapUp").setValue("yes");
         ref.child("Users").child(user.getUid()).child(sp.getString("number","")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -90,7 +93,7 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
                     whatsdone.add("no");
 
                 }
-                if(snapshot.hasChild("conflicts")) {
+                if(snapshot.hasChild("conflicts")||sp2.getString("answer2","").equals("no")) {
                     conflicts.setImageResource(R.drawable.checkmark1);
                     whatsdone.add("yes");
 
@@ -110,7 +113,7 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
                     whatsdone.add("no");
 
                 }
-                if(snapshot.hasChild("wrapup up")) {
+                if(snapshot.hasChild("wrapUp")) {
                     wrapup.setImageResource(R.drawable.checkmark1);
                     whatsdone.add("yes");
                 }

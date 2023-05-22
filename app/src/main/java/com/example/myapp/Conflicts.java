@@ -123,7 +123,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     person1.setId(count);
                     person1.setAllCaps(false);
                     count++;
-                    LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
+                    LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(250, 80);
                     paramstext.setMargins(20,10,20,10);
                     person1.setLayoutParams(paramstext);
                     view1.addView(person1);
@@ -150,11 +150,14 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                             dialog.show();
                             EditText editText=dialog.findViewById(R.id.edit_text_dialog);
                             ListView listView=dialog.findViewById(R.id.list_view_dialog);
-
-                            // Initialize array adapter
+                            Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                }
+                            });
                             adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
-
-                            // set adapter
                             listView.setAdapter(adapter);
                             editText.addTextChangedListener(new TextWatcher() {
                                 @Override
@@ -235,7 +238,13 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                             dialog.show();
                             EditText editText=dialog.findViewById(R.id.edit_text_dialog);
                             ListView listView=dialog.findViewById(R.id.list_view_dialog);
-
+                            Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                }
+                            });
                             // Initialize array adapter
                             adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
 
@@ -359,7 +368,13 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     dialog.show();
                     EditText editText = dialog.findViewById(R.id.edit_text_dialog);
                     ListView listView = dialog.findViewById(R.id.list_view_dialog);
-
+                    Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
                     // Initialize array adapter
                     adapter = new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1, people);
 
@@ -394,7 +409,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     });
                 }
             });
-            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
+            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(250, 80);
             paramstext.setMargins(20, 10, 20, 10);
             person1.setLayoutParams(paramstext);
             view1.addView(person1);
@@ -419,7 +434,13 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     dialog.show();
                     EditText editText = dialog.findViewById(R.id.edit_text_dialog);
                     ListView listView = dialog.findViewById(R.id.list_view_dialog);
-
+                    Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
                     // Initialize array adapter
                     adapter = new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1, people);
 
@@ -592,7 +613,6 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     }
                     name1 = button1.getText().toString();
                 }
-                Toast.makeText(this, ""+removedIds, Toast.LENGTH_SHORT).show();
                 refConflicts.child("Users").child(user.getUid()).child(sp.getString("number","")).child("conflicts").setValue(mapComplete);
                 startActivity(new Intent(this,Food.class));
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
@@ -623,11 +643,14 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     dialog.show();
                     EditText editText=dialog.findViewById(R.id.edit_text_dialog);
                     ListView listView=dialog.findViewById(R.id.list_view_dialog);
-
-                    // Initialize array adapter
+                    Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
                     adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
-
-                    // set adapter
                     listView.setAdapter(adapter);
                     editText.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -648,17 +671,13 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            // when item selected from list
-                            // set selected item on textView
                             person1.setText(adapter.getItem(position));
-
-                            // Dismiss dialog
                             dialog.dismiss();
                         }
                     });
                 }
             });
-            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(400, 140);
+            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(250, 80);
             paramstext.setMargins(20,10,20,10);
             person1.setLayoutParams(paramstext);
             view1.addView(person1);
@@ -683,11 +702,14 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     dialog.show();
                     EditText editText=dialog.findViewById(R.id.edit_text_dialog);
                     ListView listView=dialog.findViewById(R.id.list_view_dialog);
-
-                    // Initialize array adapter
+                    Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
                     adapter=new ArrayAdapter<>(Conflicts.this, android.R.layout.simple_list_item_1,people);
-
-                    // set adapter
                     listView.setAdapter(adapter);
                     editText.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -708,11 +730,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            // when item selected from list
-                            // set selected item on textView
                             person2.setText(adapter.getItem(position));
-
-                            // Dismiss dialog
                             dialog.dismiss();
                         }
                     });

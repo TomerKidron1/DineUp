@@ -171,7 +171,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                     date.setTextColor(Color.BLACK);
                     date.setTextSize(12);
                     LinearLayout.LayoutParams paramsDate = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    paramsDate.setMargins(20, 0, 0, 40);
+                    paramsDate.setMargins(20, 0, 0, 20);
                     date.setLayoutParams(paramsDate);
                     button.addView(name);
                     button.addView(category);

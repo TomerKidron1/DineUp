@@ -1,5 +1,6 @@
 package com.example.myapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,6 +92,10 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
                     food.setImageResource(R.drawable.checkmark1);
                 else
                     food.setImageResource(R.drawable.x);
+                if(snapshot.hasChild("wrapUp"))
+                    wrapup.setImageResource(R.drawable.checkmark1);
+                else
+                    wrapup.setImageResource(R.drawable.x);
             }
 
             @Override
@@ -129,7 +135,8 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
             else{
-                Toast.makeText(this, "You didn't selected it in the Questions section", Toast.LENGTH_SHORT).show();
+                listQuestions.set(0,"yes");
+                showPopUp("people");
             }
         }
         if(view ==conflictsBt){
@@ -137,20 +144,64 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
                 startActivity(new Intent(Navigation.this, Conflicts.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
-            else
-                Toast.makeText(this, "You didn't selected it in the Questions section", Toast.LENGTH_SHORT).show();
+            else {
+                listQuestions.set(1,"yes");
+                showPopUp("conflicts");
+            }
         }
         if(view == foodBt){
             if(listQuestions.get(2).equals("yes")) {
                 startActivity(new Intent(Navigation.this, Food.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
-            else
-                Toast.makeText(this, "You didn't selected it in the Questions section", Toast.LENGTH_SHORT).show();
+            else{
+                listQuestions.set(2,"yes");
+                showPopUp("food");
+            }
         }
         if(view == home){
             startActivity(new Intent(Navigation.this, MainScreen.class));
             overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
+        if(view == wrapupBt){
+            startActivity(new Intent(Navigation.this,WrapUp.class));
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        }
+    }
+    private void showPopUp(String what){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Navigation.this);
+        builder.setTitle("Would you like to create a "+what+" list?");
+        builder.setMessage("you didnt selected it in the questions page, would you like to change your selection?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Map<String,String> map = new HashMap<>();
+                map.put("answer1",listQuestions.get(0));
+                map.put("answer2",listQuestions.get(1));
+                map.put("answer3",listQuestions.get(2));
+                ref2.child(user.getUid()).child(sp.getString("number","")).child("questions").setValue(map);
+                if(what.equals("people")){
+                    startActivity(new Intent(Navigation.this,People.class));
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+
+                }
+                if(what.equals("conflicts")){
+                    startActivity(new Intent(Navigation.this,Conflicts.class));
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                }
+                if(what.equals("food")){
+                    startActivity(new Intent(Navigation.this,Food.class));
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                }
+            }
+        });
+        builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.show();
     }
 }

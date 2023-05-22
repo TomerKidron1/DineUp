@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@android:color/white"
-    >
+    android:background="@android:color/white">
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,11 +31,19 @@
         android:background="@android:drawable/editbox_background"
         />
 
-    <!-- List view to insert list of items-->
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/list_view_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <Button
+        android:id="@+id/cancel_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:background="@drawable/rounded_table_white"
+        android:textAllCaps="false"
         />
+
 
 </LinearLayout>

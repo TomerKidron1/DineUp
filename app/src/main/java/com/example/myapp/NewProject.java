@@ -132,7 +132,6 @@ public class NewProject extends AppCompatActivity implements View.OnClickListene
                                 ref.child(userID).child(i+"").setValue(user);
                                 spe.putString("number",String.valueOf(i));
                                 spe.commit();
-                                Toast.makeText(NewProject.this,"data added",Toast.LENGTH_LONG).show();
                                 flag=true;
                                 break;
                             }

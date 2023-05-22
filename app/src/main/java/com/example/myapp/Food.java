@@ -129,7 +129,13 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                             dialog.show();
                             EditText editText = dialog.findViewById(R.id.edit_text_dialog);
                             ListView listView = dialog.findViewById(R.id.list_view_dialog);
-
+                            Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                }
+                            });
                             // Initialize array adapter
                             adapter = new ArrayAdapter<>(Food.this, android.R.layout.simple_list_item_1, people);
 
@@ -165,7 +171,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                         }
                     });
                     count++;
-                    LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(450, 140);
+                    LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(300, 90);
                     paramstext.setMargins(20, 10, 20, 10);
                     person.setLayoutParams(paramstext);
                     view1.addView(person);
@@ -315,7 +321,13 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                     dialog.show();
                     EditText editText = dialog.findViewById(R.id.edit_text_dialog);
                     ListView listView = dialog.findViewById(R.id.list_view_dialog);
-
+                    Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
                     // Initialize array adapter
                     adapter = new ArrayAdapter<>(Food.this, android.R.layout.simple_list_item_1, people);
 
@@ -350,7 +362,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                     });
                 }
             });
-            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(450, 140);
+            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(300, 90);
             paramstext.setMargins(20, 10, 20, 10);
             person.setLayoutParams(paramstext);
             view1.addView(person);
@@ -564,7 +576,13 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                         dialog.show();
                         EditText editText = dialog.findViewById(R.id.edit_text_dialog);
                         ListView listView = dialog.findViewById(R.id.list_view_dialog);
-
+                        Button cancel = dialog.findViewById(R.id.cancel_dialog);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.cancel();
+                            }
+                        });
                         // Initialize array adapter
                         adapter = new ArrayAdapter<>(Food.this, android.R.layout.simple_list_item_1, people);
 
@@ -600,7 +618,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                     }
                 });
                 count++;
-                LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(450, 140);
+                LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(300, 90);
                 paramstext.setMargins(20, 10, 20, 10);
                 person.setLayoutParams(paramstext);
                 view1.addView(person);

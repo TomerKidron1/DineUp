@@ -174,9 +174,15 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
             ref.child(user.getUid()).child(spNumber.getString("number","")).child("questions").setValue(map);
             if(sp.getString("answer1","").equals("yes")){
                 startActivity(new Intent(Questions.this,People.class));
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
             else if(sp.getString("answer3","").equals("yes")){
                 startActivity(new Intent(Questions.this,Food.class));
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+            }
+            else{
+                startActivity(new Intent(Questions.this,WrapUp.class));
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         }
         if(view == navigate){
