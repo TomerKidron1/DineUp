@@ -62,11 +62,12 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 numberObj = (int) snapshot.getChildrenCount();
-                numberObj = (numberObj-1)/3;
+                if(snapshot.hasChild("custom"))
+                    numberObj = (numberObj-1)/3;
+                else
+                    numberObj = numberObj/3;
                 for(int i=0;i<numberObj;i++){
-                    ImageView test = new ImageView(Final.this);
-                    test.setTag(R.drawable.custom);
-                    if(snapshot.child("custom").exists() && Math.toIntExact((long)snapshot.child("object "+i).getValue()) == Integer.parseInt(test.getTag().toString())){
+                    if(snapshot.child("custom").exists() && snapshot.child("object "+i).equals("custom")){
                         numberCustom++;
                         LinearLayout linearLayout = new LinearLayout(Final.this);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(600,400);
@@ -76,7 +77,7 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
                         linearLayout.setLayoutParams(params);
                         ll.setGravity(Gravity.CENTER);
                         ImageView obj = new ImageView(Final.this);
-                        obj.setImageResource(Math.toIntExact((long) snapshot.child("object "+i).getValue()) );
+                        obj.setImageResource(R.drawable.custom);
                         int height = Math.toIntExact((Long) snapshot.child("custom").child("height "+numberCustom).getValue());
                         int width = Math.toIntExact((Long) snapshot.child("custom").child("width "+numberCustom).getValue());
                         LinearLayout.LayoutParams objParmas = new LinearLayout.LayoutParams(width, height);
@@ -106,7 +107,7 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
                         linearLayout.setLayoutParams(params);
                         ll.setGravity(Gravity.CENTER);
                         ImageView obj = new ImageView(Final.this);
-                        obj.setImageResource(Math.toIntExact((long) snapshot.child("object "+i).getValue()) );
+                        determinObject((String)snapshot.child("object "+i).getValue(),obj);
                         LinearLayout.LayoutParams objParmas = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
                         objParmas.gravity = Gravity.CENTER;
                         obj.setLayoutParams(objParmas);
@@ -143,7 +144,27 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
             overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
         if(view == peoplelist){
-
+            startActivity(new Intent(Final.this,PeopleFoodFinal.class));
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         }
+    }
+    private void determinObject(String object,ImageView imageview) {
+        if(object.equals("bigCircle"))
+            imageview.setImageResource(R.drawable.big_circle_white);
+        if(object.equals("smallCircle"))
+            imageview.setImageResource(R.drawable.small_circle_white);
+        if(object.equals("rectangle"))
+            imageview.setImageResource(R.drawable.rectangle_white);
+        if(object.equals("verticalRectangle"))
+            imageview.setImageResource(R.drawable.vertical_rectangle_table_white);
+        if(object.equals("roundedRectangle"))
+            imageview.setImageResource(R.drawable.rounded_table_white);
+        if(object.equals("verticalRoundedRectangle"))
+            imageview.setImageResource(R.drawable.vertical_rounded_table_white);
+        if(object.equals("square"))
+            imageview.setImageResource(R.drawable.square_white);
+        if(object.equals("custom"))
+            imageview.setImageResource(R.drawable.custom);
+
     }
 }

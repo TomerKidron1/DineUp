@@ -3,7 +3,9 @@ package com.example.myapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,6 +49,7 @@ public class People extends AppCompatActivity implements View.OnClickListener {
     FirebaseUser user;
     SharedPreferences sp;
     SharedPreferences sp1;
+    NetReciever netReciever = new NetReciever();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,7 +130,27 @@ public class People extends AppCompatActivity implements View.OnClickListener {
                         builder.show();
                         return true;
                     case R.id.rename_people:
-                        
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(People.this);
+                        builder1.setTitle("What name would you like to change to?");
+                        final EditText name1 = new EditText(People.this);
+                        name1.setHint("name");
+                        name1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+                        name1.setSingleLine();
+                        builder1.setView(name1);
+                        builder1.setCancelable(true);
+                        builder1.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                arrayList.set(arrayList.indexOf("name"),name1.getText().toString());
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                        builder1.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
                     default:
                         return false;
                 }
@@ -184,5 +207,18 @@ public class People extends AppCompatActivity implements View.OnClickListener {
             startActivity(new Intent(People.this,Navigation.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
+    }
+    @Override
+    protected void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netReciever,intentFilter);
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(netReciever);
+        super.onStop();
     }
 }

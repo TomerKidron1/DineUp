@@ -240,7 +240,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
             }
         }
-        if(view == passvisible){
+        /*if(view == passvisible){
             if(registPass.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD){
                 registPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             }
@@ -249,7 +249,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             }
             registPass.setSelection(registPass.length());
 
-        }
+        }*/
         if(view == signintext){
             Intent intent = new Intent(Register.this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

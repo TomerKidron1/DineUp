@@ -16,11 +16,13 @@ public class NetReciever extends BroadcastReceiver {
            AlertDialog.Builder builder = new AlertDialog.Builder(context);
            builder.setTitle("No Internet Connection");
            builder.setMessage("Please check your internet connection\nwould you like to try again?");
-           builder.setCancelable(true);
+           builder.setCancelable(false);
            builder.setPositiveButton("Retry", (new DialogInterface.OnClickListener() {
                @Override
                public void onClick(DialogInterface dialogInterface, int i) {
                    dialogInterface.dismiss();
+                   context.startActivity(new Intent(context,context.getClass()));
+
                }
            }));
            builder.setNegativeButton("Cancel", (new DialogInterface.OnClickListener() {

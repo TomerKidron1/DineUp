@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -64,6 +66,8 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
     ArrayAdapter<String> adapter,adapter2;
     Map<String,String> mapConflicts,mapComplete;
     ArrayList<Integer> removedIds;
+    NetReciever netReciever = new NetReciever();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -853,5 +857,18 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
             bt2.setId(countDone);
             countDone++;
         }
+    }
+    @Override
+    protected void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netReciever,intentFilter);
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(netReciever);
+        super.onStop();
     }
 }

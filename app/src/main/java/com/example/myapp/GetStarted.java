@@ -22,10 +22,6 @@ public class GetStarted extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View view) {
         if(view == getStarted){
-            SharedPreferences sp = getSharedPreferences("getStarted", MODE_PRIVATE);
-            SharedPreferences.Editor spe = sp.edit();
-            spe.putString("gotstarted","true");
-            spe.commit();
             startActivity(new Intent(GetStarted.this, Register.class));
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         }

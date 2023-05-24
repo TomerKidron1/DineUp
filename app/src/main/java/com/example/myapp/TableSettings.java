@@ -51,7 +51,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     int count;
     SharedPreferences sp;
     Button button2;
-    int countObj;
+    int countObj,seetsCustom;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.tablesettings);
         count=0;
         countObj = 1;
+        seetsCustom = 0;
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         layout = findViewById(R.id.layout);
         reset= findViewById(R.id.reset_button);
@@ -111,22 +112,22 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     private void retrieveObjects(DataSnapshot snapshot) {
         for(int i=0;i<(snapshot.child("parameters").getChildrenCount())/3;i++)
         {
-            addView(Math.toIntExact((Long)snapshot.child("parameters").child("object "+i).getValue()),Math.toIntExact((Long)snapshot.child("parameters").child("top-imageview "+i).getValue()),Math.toIntExact((Long)snapshot.child("parameters").child("left-imageview "+i).getValue()),snapshot);
+            addView((String)snapshot.child("parameters").child("object "+i).getValue(),Math.toIntExact((Long)snapshot.child("parameters").child("top-imageview "+i).getValue()),Math.toIntExact((Long)snapshot.child("parameters").child("left-imageview "+i).getValue()),snapshot);
             count++;
             countObj++;
         }
     }
     private int xDelta,yDelta;
 
-    public void addView(int object,int top,int left,DataSnapshot snapshot) {
+    public void addView(String object,int top,int left,DataSnapshot snapshot) {
         ImageView test = new ImageView(TableSettings.this);
         test.setTag(R.drawable.custom);
-        if(snapshot.child("parameters").child("custom").exists() && object == Integer.parseInt(test.getTag().toString())){
+        if(snapshot.child("parameters").child("custom").exists() && object.equals("custom")){
                 ImageView imageview = new ImageView(TableSettings.this);
                 FrameLayout frameLayout = findViewById(R.id.layout);
                 int height = Math.toIntExact((Long) snapshot.child("parameters").child("custom").child("height "+countObj).getValue());
                 int width = Math.toIntExact((Long) snapshot.child("parameters").child("custom").child("width "+countObj).getValue());
-                imageview.setImageResource(object);
+                determinObject(object,imageview);
                 LinearLayout.LayoutParams params = new LinearLayout
                         .LayoutParams(width, height);
                 params.setMargins(left, top, 0, 0);
@@ -175,7 +176,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         else {
             ImageView imageview = new ImageView(TableSettings.this);
             FrameLayout frameLayout = findViewById(R.id.layout);
-            imageview.setImageResource(object);
+            determinObject(object,imageview);
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(left, top, 0, 0);
@@ -245,15 +246,17 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                             map.put("top-imageview " + i, params.topMargin);
                             map.put("left-imageview " + i, params.leftMargin);
                             map.put("object "+ i,imageView.getTag());
-                            if(imageView.getTag().equals((int) R.drawable.custom)){
+                            if(imageView.getTag().equals("custom")){
                                 mapCustom.put("height "+countCustom,imageView.getHeight());
                                 mapCustom.put("width "+countCustom,imageView.getWidth());
+                                mapCustom.put("seets "+countCustom, seetsCustom);
                                 countCustom++;
                             }
                             ref2.child(number).child("parameters").setValue(map);
                             ref2.child(number).child("parameters").child("custom").setValue(mapCustom);
                         }
                     }
+                    count=0;
                 }
 
                 @Override
@@ -282,7 +285,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
             imageview.setId(count);
-            imageview.setTag(R.drawable.big_circle_white);
+            imageview.setTag("bigCircle");
             count++;
 
             imageview.setOnTouchListener(new View.OnTouchListener() {
@@ -330,7 +333,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
-            imageview.setTag(R.drawable.small_circle_white);
+            imageview.setTag("smallCircle");
             imageview.setId(count);
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             count++;
@@ -379,7 +382,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
-            imageview.setTag(R.drawable.rectangle_white);
+            imageview.setTag("rectangle");
             imageview.setId(count);
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             count++;
@@ -428,7 +431,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
-            imageview.setTag(R.drawable.vertical_rectangle_table_white);
+            imageview.setTag("verticalRectangle");
             imageview.setId(count);
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             count++;
@@ -477,7 +480,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
-            imageview.setTag(R.drawable.rounded_table_white);
+            imageview.setTag("roundedRectangle");
             imageview.setId(count);
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             count++;
@@ -526,7 +529,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
-            imageview.setTag(R.drawable.vertical_rounded_table_white);
+            imageview.setTag("verticalRoundedRectangle");
             imageview.setId(count);
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             count++;
@@ -575,7 +578,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             LinearLayout.LayoutParams params = new LinearLayout
                     .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageview.setLayoutParams(params);
-            imageview.setTag(R.drawable.square_white);
+            imageview.setTag("square");
             imageview.setId(count);
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             count++;
@@ -629,6 +632,27 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
             overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
         }
     }
+
+    private void determinObject(String object,ImageView imageview) {
+        if(object.equals("bigCircle"))
+            imageview.setImageResource(R.drawable.big_circle_white);
+        if(object.equals("smallCircle"))
+            imageview.setImageResource(R.drawable.small_circle_white);
+        if(object.equals("rectangle"))
+            imageview.setImageResource(R.drawable.rectangle_white);
+        if(object.equals("verticalRectangle"))
+            imageview.setImageResource(R.drawable.vertical_rectangle_table_white);
+        if(object.equals("roundedRectangle"))
+            imageview.setImageResource(R.drawable.rounded_table_white);
+        if(object.equals("verticalRoundedRectangle"))
+            imageview.setImageResource(R.drawable.vertical_rounded_table_white);
+        if(object.equals("square"))
+            imageview.setImageResource(R.drawable.square_white);
+        if(object.equals("custom"))
+            imageview.setImageResource(R.drawable.custom);
+
+    }
+
     public Map<String,Double> showPopUpCustom(){
         Map<String,Double> values = new HashMap<>();
         AlertDialog.Builder builder1 = new AlertDialog.Builder(TableSettings.this);
@@ -653,6 +677,14 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         inputWidth.setHint("Width");
         inputWidth.setLayoutParams(lp2);
         layout.addView(inputWidth);
+        final EditText inputSeets = new EditText(TableSettings.this);
+        LinearLayout.LayoutParams lp3 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        inputSeets.setLayoutParams(lp3);
+        inputSeets.setInputType(InputType.TYPE_CLASS_NUMBER);
+        inputSeets.setHint("Number of Seets");
+        layout.addView(inputSeets);
         builder1.setView(layout);
         builder1.setPositiveButton("Enter", (new DialogInterface.OnClickListener() {
             @Override
@@ -666,8 +698,9 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                             .LayoutParams(Integer.valueOf(inputWidth.getText().toString()), Integer.valueOf(inputHeight.getText().toString()));
                     imageview.setImageResource(R.drawable.custom);
                     imageview.setLayoutParams(params);
-                    imageview.setTag(R.drawable.custom);
+                    imageview.setTag("custom");
                     imageview.setId(count);
+                    seetsCustom = Integer.parseInt(inputSeets.getText().toString());
                     count++;
                     imageview.setOnTouchListener(new View.OnTouchListener() {
                         @Override
@@ -764,4 +797,10 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         popup.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(TableSettings.this,MainScreen.class);
+        startActivity(intent);
+    }
 }
