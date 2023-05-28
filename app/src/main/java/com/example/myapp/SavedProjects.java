@@ -162,33 +162,8 @@ public class SavedProjects extends AppCompatActivity implements View.OnClickList
                     SharedPreferences.Editor spe = sp.edit();
                     spe.putString("number", String.valueOf(rightNumber));
                     spe.commit();
-                    ref2=ref2.child(""+user.getUid()).child(""+rightNumber);
-                    ref2.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.hasChild("parameters")){
-                                if(!snapshot.hasChild("people")){
-                                    startActivity(new Intent(SavedProjects.this,TableSettings.class));
-                                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                                }
-                                else{
-                                    startActivity(new Intent(SavedProjects.this,People.class));
-                                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                                }
-
-                            }
-                            else{
-                                startActivity(new Intent(SavedProjects.this,TableSettings.class));
-                                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
+                    startActivity(new Intent(SavedProjects.this,Navigation.class));
+                    overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
 
                 }
             });

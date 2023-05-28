@@ -28,9 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Questions extends AppCompatActivity implements View.OnClickListener {
-    RadioGroup radioGroup1;
-    RadioGroup radioGroup2;
-    RadioGroup radioGroup3;
+    RadioGroup radioGroup1,radioGroup2,radioGroup3;
     SharedPreferences sp,spNumber;
     SharedPreferences.Editor editor;
     Button next,navigate;
@@ -68,7 +66,7 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
         ref = database.getReference("Users");
         ref2 = database.getReference();
 
-                ref.child(user.getUid()).child(spNumber.getString("number","")).addValueEventListener(new ValueEventListener() {
+        ref.child(user.getUid()).child(spNumber.getString("number","")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 retreieveObjects(snapshot);

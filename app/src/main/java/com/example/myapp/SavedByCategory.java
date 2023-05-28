@@ -99,7 +99,7 @@ public class SavedByCategory extends AppCompatActivity implements View.OnClickLi
                     map[0] = (Map) postSnapshot.getValue();
                     saved.add(new SavedProject(map[0].get("name"), map[0].get("numberofpeople"), map[0].get("category"), map[0].get("date")));
                 }
-                link();
+                link(snapshot);
                 return;
             }
 
@@ -110,7 +110,7 @@ public class SavedByCategory extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void link() {
+    private void link(DataSnapshot snapshot) {
         ArrayList<SavedProject> list = new ArrayList<>();
         for (int i = 0; i < saved.size(); i++) {
             if (saved.get(i).getCategory().equals(sp.getString("pref", ""))) {
@@ -165,10 +165,23 @@ public class SavedByCategory extends AppCompatActivity implements View.OnClickLi
             button.addView(date);
             button.setForegroundGravity(Gravity.CENTER);
             button.setBackgroundResource(R.drawable.saved_proj_tiles);
+            int finalI = i;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(SavedByCategory.this, "" + name.getText().toString(), Toast.LENGTH_SHORT).show();
+                    int rightNumber=0;
+                    for(int j=0;j< snapshot.getChildrenCount();j++)
+                    {
+                        if(snapshot.child(String.valueOf(j)).child("name").getValue().equals(saved.get(finalI).getProject_name()))
+                            rightNumber = j;
+
+                    }
+                    SharedPreferences sp1= getSharedPreferences("currentProject",MODE_PRIVATE);
+                    SharedPreferences.Editor spe = sp1.edit();
+                    spe.putString("number", String.valueOf(rightNumber));
+                    spe.commit();
+                    startActivity(new Intent(SavedByCategory.this,Navigation.class));
+                    overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 }
             });
             linearLayout.addView(button);

@@ -70,7 +70,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         ref3 = database.getReference("Users");
         sp1 = getSharedPreferences("categoryPref",MODE_PRIVATE);
         editor1 = sp1.edit();
-        SharedPreferences sp = getSharedPreferences("User", MODE_PRIVATE);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user.getDisplayName()!=null&&!user.getDisplayName().equals(""))
             name.setText(user.getDisplayName());
@@ -325,4 +324,5 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
 }

@@ -1,7 +1,9 @@
 package com.example.myapp;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
@@ -54,6 +56,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     TextView signintext;
     GoogleSignInClient googleSignInClient;
     RadioGroup radio;
+    NetReciever netReciever = new NetReciever();
 
 
     @Override
@@ -270,6 +273,19 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+    @Override
+    protected void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netReciever,intentFilter);
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(netReciever);
+        super.onStop();
     }
 
 }

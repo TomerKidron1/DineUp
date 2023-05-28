@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else{
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Did you forgot your password?");
-                builder.setMessage("This will send you an email with instructions on how to reset your password");
+                builder.setMessage("This will send you an email with instructions on how to reset your password\nIs this your email: "+Signinemail.getText().toString());
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

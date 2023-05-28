@@ -120,8 +120,6 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     private int xDelta,yDelta;
 
     public void addView(String object,int top,int left,DataSnapshot snapshot) {
-        ImageView test = new ImageView(TableSettings.this);
-        test.setTag(R.drawable.custom);
         if(snapshot.child("parameters").child("custom").exists() && object.equals("custom")){
                 ImageView imageview = new ImageView(TableSettings.this);
                 FrameLayout frameLayout = findViewById(R.id.layout);
@@ -802,5 +800,6 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         super.onBackPressed();
         Intent intent = new Intent(TableSettings.this,MainScreen.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 }

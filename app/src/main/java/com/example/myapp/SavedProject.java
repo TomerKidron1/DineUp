@@ -14,8 +14,6 @@ public class SavedProject {
         Date = date;
     }
 
-    public SavedProject(Object value) {
-    }
 
     public String getProject_name() {
         return project_name;
