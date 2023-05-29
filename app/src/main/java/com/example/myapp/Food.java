@@ -136,10 +136,8 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                                     dialog.cancel();
                                 }
                             });
-                            // Initialize array adapter
                             adapter = new ArrayAdapter<>(Food.this, android.R.layout.simple_list_item_1, people);
 
-                            // set adapter
                             listView.setAdapter(adapter);
                             editText.addTextChangedListener(new TextWatcher() {
                                 @Override
@@ -160,11 +158,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    // when item selected from list
-                                    // set selected item on textView
                                     person.setText(adapter.getItem(position));
-
-                                    // Dismiss dialog
                                     dialog.dismiss();
                                 }
                             });
@@ -328,10 +322,8 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                             dialog.cancel();
                         }
                     });
-                    // Initialize array adapter
                     adapter = new ArrayAdapter<>(Food.this, android.R.layout.simple_list_item_1, people);
 
-                    // set adapter
                     listView.setAdapter(adapter);
                     editText.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -352,11 +344,7 @@ public class Food extends AppCompatActivity implements View.OnClickListener {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            // when item selected from list
-                            // set selected item on textView
                             person.setText(adapter.getItem(position));
-
-                            // Dismiss dialog
                             dialog.dismiss();
                         }
                     });

@@ -54,7 +54,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
     LinearLayout linearLayout;
     Button next,navigate;
     ImageView plus;
-    int count,arrow_count;
+    int count;
     FirebaseDatabase database;
     DatabaseReference ref,refPeople,refConflicts,refConflictsObjects;
     SharedPreferences sp;
@@ -63,7 +63,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
     FirebaseUser user;
     FirebaseAuth auth;
     Map<String,String> mapRetrieveObjects;
-    ArrayAdapter<String> adapter,adapter2;
+    ArrayAdapter<String> adapter;
     Map<String,String> mapConflicts,mapComplete;
     ArrayList<Integer> removedIds;
     NetReciever netReciever = new NetReciever();
@@ -83,7 +83,6 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
         mapConflicts = new HashMap<>();
         mapComplete = new HashMap<>();
         conflicts = new ArrayList<>();
-        arrow_count = 0;
         removedIds = new ArrayList<>();
         mapRetrieveObjects = new HashMap<>();
         refConflictsObjects = database.getReference();

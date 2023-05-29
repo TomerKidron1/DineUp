@@ -72,6 +72,7 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
                 retreieveObjects(snapshot);
                 if(sp.getString("answer1","").equals("no")){
                     radioGroup2.setEnabled(false);
+                    radioGroup3.setEnabled(false);
                 }
 
             }
@@ -90,17 +91,24 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
                     editor.commit();
                     RadioButton radio1 = findViewById(R.id.yes2);
                     RadioButton radio3 = findViewById(R.id.no2);
+                    RadioButton radio5 = findViewById(R.id.yes3);
+                    RadioButton radio7 = findViewById(R.id.no3);
                     radio1.setEnabled(true);
                     radio3.setEnabled(true);
+                    radio5.setEnabled(true);
+                    radio7.setEnabled(true);
                 }
                 else {
                     editor.putString("answer1", "no");
                     editor.commit();
                     RadioButton radio = findViewById(R.id.yes2);
                     RadioButton radio2 = findViewById(R.id.no2);
+                    RadioButton radio4 = findViewById(R.id.yes3);
+                    RadioButton radio6 = findViewById(R.id.no3);
                     radio.setEnabled(false);
                     radio2.setEnabled(false);
-
+                    radio4.setEnabled(false);
+                    radio6.setEnabled(false);
                 }
             }
         });

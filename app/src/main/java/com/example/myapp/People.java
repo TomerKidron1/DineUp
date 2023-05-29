@@ -198,9 +198,9 @@ public class People extends AppCompatActivity implements View.OnClickListener {
                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
            }
            else{
-
+               startActivity(new Intent(this,WrapUp.class));
+               overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
            }
-
 
         }
         if(view == navigate){
