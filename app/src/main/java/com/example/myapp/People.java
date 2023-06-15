@@ -151,6 +151,7 @@ public class People extends AppCompatActivity implements View.OnClickListener {
                                 dialogInterface.cancel();
                             }
                         });
+                        builder1.show();
                     default:
                         return false;
                 }
@@ -177,6 +178,12 @@ public class People extends AppCompatActivity implements View.OnClickListener {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     arrayList.add(editText.getText().toString());
                     adapter.notifyDataSetChanged();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
                 }
             });
             builder.setCancelable(true);

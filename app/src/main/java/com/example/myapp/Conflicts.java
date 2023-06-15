@@ -618,7 +618,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                 }
                 refConflicts.child("Users").child(user.getUid()).child(sp.getString("number","")).child("conflicts").setValue(mapComplete);
                 startActivity(new Intent(this,Food.class));
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         }
         if(view==plus){

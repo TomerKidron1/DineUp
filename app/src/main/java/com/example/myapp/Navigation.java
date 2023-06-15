@@ -34,7 +34,8 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference ref,ref2;
-    SharedPreferences sp;
+    SharedPreferences sp,sp2;
+    SharedPreferences.Editor editor;
     ArrayList<String> listQuestions;
 
     @Override
@@ -47,6 +48,8 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
         ref = database.getReference("Users");
         ref2 = database.getReference("Users");
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
+        sp2 = getSharedPreferences("questions",MODE_PRIVATE);
+        editor = sp2.edit();
         listQuestions = new ArrayList<>();
         table = findViewById(R.id.table_nav_iv);
         questions  = findViewById(R.id.questions_nav_iv);
@@ -182,15 +185,21 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
                 map.put("answer3",listQuestions.get(2));
                 ref2.child(user.getUid()).child(sp.getString("number","")).child("questions").setValue(map);
                 if(what.equals("people")){
+                    editor.putString("answer1","yes");
+                    editor.commit();
                     startActivity(new Intent(Navigation.this,People.class));
                     overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
 
                 }
                 if(what.equals("conflicts")){
+                    editor.putString("answer2","yes");
+                    editor.commit();
                     startActivity(new Intent(Navigation.this,Conflicts.class));
                     overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 }
                 if(what.equals("food")){
+                    editor.putString("answer3","yes");
+                    editor.commit();
                     startActivity(new Intent(Navigation.this,Food.class));
                     overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 }

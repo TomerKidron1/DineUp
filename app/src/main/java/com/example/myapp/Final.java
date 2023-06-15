@@ -31,6 +31,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+
 public class Final extends AppCompatActivity implements View.OnClickListener {
     Button nav,peoplelist;
     ImageView share;
@@ -39,9 +44,12 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
     FirebaseDatabase database;
     FirebaseAuth auth;
     FirebaseUser user;
-    DatabaseReference ref;
+    DatabaseReference ref,ref2,ref3;
     SharedPreferences sp;
     int numberObj=0,numberCustom=0,countObj=0;
+    ArrayList<String> people;
+    ArrayList<DoubleString> conflicts;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +66,10 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         ref = database.getReference();
+        conflicts = new ArrayList<>();
+        people = new ArrayList<>();
+        ref2 = database.getReference();
+        ref3 = database.getReference();
         ref.child("Users").child(user.getUid()).child(sp.getString("number","")).child("parameters").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -97,6 +109,14 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
                         linearLayout.addView(obj);
                         ll.addView(linearLayout);
                         countObj++;
+                        linearLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i = new Intent(Final.this,TableSitting.class);
+                                i.putExtra("TableNumber",linearLayout.getId());
+                                startActivity(i);
+                            }
+                        });
                     }
                     else{
                         LinearLayout linearLayout = new LinearLayout(Final.this);
@@ -125,6 +145,14 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
                         linearLayout.addView(obj);
                         ll.addView(linearLayout);
                         countObj++;
+                        linearLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i = new Intent(Final.this,TableSitting.class);
+                                i.putExtra("TableNumber",(linearLayout.getId()));
+                                startActivity(i);
+                            }
+                        });
                     }
                 }
             }
@@ -134,7 +162,47 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
+        ref2.child("Users").child(user.getUid()).child(sp.getString("number","")).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(int i=0;i<snapshot.child("people").getChildrenCount();i++){
+                    people.add((String)snapshot.child("people").child("person "+(i+1)).getValue());
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        Utils.delay(2, new Utils.DelayCallback() {
+            @Override
+            public void afterDelay() {
+                buildArrays();
+            }
+        });
+        ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("conflicts").exists()){
+                    for(int i=0;i<snapshot.child("conflicts").getChildrenCount();i++){
+                        String conf =(String) snapshot.child("conflicts").child(""+(i+1)).getValue();
+                        String name1 = "";
+                        int iend = conf.indexOf("+");
+                        if (iend != -1) {
+                            name1 = conf.substring(0, iend);
+                        }
+                        DoubleString doubleString = new DoubleString(name1,conf.substring(conf.lastIndexOf("+")+1));
+                        conflicts.add(doubleString);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -166,5 +234,162 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
         if(object.equals("custom"))
             imageview.setImageResource(R.drawable.custom);
 
+    }
+    private void buildArrays(){
+        int peopleintable;
+        if(people.size()%2==0){
+             peopleintable = (people.size()/countObj);
+            for(int i=0;i<countObj;i++){
+                Map<String,String> map = new HashMap<>();
+                for(int j=0;j<peopleintable;j++){
+                    map.put("person "+(j+1),people.get(0));
+                    people.remove(0);
+                }
+                ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").child("table "+(i+1)).setValue(map);
+            }
+        }
+        else{
+            int large = largestTable();
+            peopleintable = (people.size()/countObj);
+            for(int i=0;i<countObj;i++){
+                Map<String,String> map = new HashMap<>();
+                for(int j=0;j<peopleintable;j++){
+                    map.put("person "+(j+1),people.get(0));
+                    people.remove(0);
+                    if(i==(large)&&(j==(peopleintable-1))){
+                        map.put("person "+(j+2),people.get(0));
+                        people.remove(0);
+                    }
+                }
+
+                ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").child("table "+(i+1)).setValue(map);
+
+            }
+        }
+           checkConflicts("");
+
+
+    }
+
+    private void checkConflicts(String nameConf) {
+        final String[] finalNameConf = {nameConf};
+        for(int i=0;i<countObj;i++) {
+            ArrayList<String> array = new ArrayList<>();
+            addValues(array,i);
+            int finalI = i;
+            Utils.delay(1, new Utils.DelayCallback() {
+                @Override
+                public void afterDelay() {
+                    if (!finalNameConf[0].equals("")) {
+                        array.add(finalNameConf[0]);
+                        finalNameConf[0] = "";
+                    }
+                    int size = array.size();
+                    ArrayList<String> remove = new ArrayList<>();
+                    for (int k = 0; k < size; k++) {
+                        for (int h = 0; h < conflicts.size(); h++) {
+                            if (array.get(k).equals(conflicts.get(h).getString1())) {
+                                for (int l = 0; l < array.size(); l++) {
+                                    if (array.get(l).equals(conflicts.get(h).getString2())) {
+                                        finalNameConf[0] = array.get(l);
+                                        remove.add(array.get(l));
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    for(int b=0;b<remove.size();b++) {
+                        array.remove(remove.get(b));
+                    }
+                    ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").child("table "+(finalI +1)).setValue(array);
+                }
+            });
+
+        }
+        if(!finalNameConf[0].equals("")){
+            checkConflicts(finalNameConf[0]);
+        }
+    }
+    private void addValues(ArrayList<String> array, int i){
+        CountDownLatch done = new CountDownLatch(0);
+        ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(int j = 0; j<snapshot.child("table "+(i +1)).getChildrenCount(); j++){
+                    array.add((String)snapshot.child("table "+(i +1)).child("person "+(j+1)).getValue());
+                }
+                done.countDown();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        try {
+            done.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private int largestTable() {
+        final int[] largestNumber = {0};
+        ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("parameters").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int largest=0;
+                for(int i=0;i<countObj;i++){
+                    if(snapshot.child("object "+i).getValue().equals("bigCircle"))
+                        if(largest<16) {
+                            largest = 16;
+                            largestNumber[0] = i;
+                        }
+                    if(snapshot.child("object "+i).getValue().equals("smallCircle"))
+                        if(largest<8) {
+                            largest = 8;
+                            largestNumber[0] = i;
+                        }
+                    if(snapshot.child("object "+i).getValue().equals("rectangle"))
+                        if(largest<20) {
+                            largest = 20;
+                            largestNumber[0] = i;
+                        }
+                    if(snapshot.child("object "+i).getValue().equals("verticalRectangle"))
+                        if(largest<20) {
+                            largest = 20;
+                            largestNumber[0] = i;
+                        }
+                    if(snapshot.child("object "+i).getValue().equals("roundedRectangle"))
+                        if(largest<18) {
+                            largest = 18;
+                            largestNumber[0] = i;
+                        }
+                    if(snapshot.child("object "+i).getValue().equals("verticalRoundedRectangle"))
+                        if(largest<18) {
+                            largest = 18;
+                            largestNumber[0] = i;
+                        }
+                    if(snapshot.child("object "+i).getValue().equals("square"))
+                        if(largest<14) {
+                            largest = 14;
+                            largestNumber[0] = i;
+                        }
+                    if(snapshot.child("object "+i).getValue().equals("custom"))
+                        if(Math.toIntExact((Long)snapshot.child("custom").child("seets").getValue())>largest) {
+                            largest = Math.toIntExact((Long) snapshot.child("custom").child("seets").getValue());
+                            largestNumber[0] = i;
+                        }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return (largestNumber[0]+1);
     }
 }

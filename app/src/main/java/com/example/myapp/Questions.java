@@ -243,17 +243,28 @@ public class Questions extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(what.equals("people and conflicts")){
+                    editor.putString("answer1","no");
+                    editor.putString("answer2","no");
+                    editor.commit();
                     ref2.child("Users").child(user.getUid()).child(spNumber.getString("number","")).child("people").setValue(null);
                     ref2.child("Users").child(user.getUid()).child(spNumber.getString("number","")).child("conflicts").setValue(null);
                 }
                 if(what.equals("conflicts")){
+                    editor.putString("answer2","no");
+                    editor.commit();
                     ref2.child("Users").child(user.getUid()).child(spNumber.getString("number","")).child("conflicts").setValue(null);
 
                 }
                 if(what.equals("food")){
+                    editor.putString("answer3","no");
+                    editor.commit();
                     ref2.child("Users").child(user.getUid()).child(spNumber.getString("number","")).child("food").setValue(null);
                 }
                 if(what.equals("people, conflicts and food")){
+                    editor.putString("answer1","no");
+                    editor.putString("answer2","no");
+                    editor.putString("answer3","no");
+                    editor.commit();
                     ref2.child("Users").child(user.getUid()).child(spNumber.getString("number","")).child("people").setValue(null);
                     ref2.child("Users").child(user.getUid()).child(spNumber.getString("number","")).child("conflicts").setValue(null);
                     ref2.child("Users").child(user.getUid()).child(spNumber.getString("number","")).child("food").setValue(null);
