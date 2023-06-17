@@ -1,5 +1,6 @@
 package com.example.myapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -252,9 +254,6 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
                      people.remove(0);
                      arrayList.add(arrayList1);
                  }
-                 else{
-                     Toast.makeText(this, "Not enough people for that amount of tables", Toast.LENGTH_SHORT).show();
-                 }
              }
              while(!people.isEmpty()){
                  for(int i=0;i<countObj;i++){
@@ -264,10 +263,15 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
                      }
                  }
              }
-             submitToFirebase(arrayList);
-             if(!returnedValue.equals("")){
-                 while(!returnedValue.equals("")){
-                     submitToFirebase(arrayList);
+             if(arrayList.size()<countObj){
+                 showPopUp2();
+             }
+             else {
+                 submitToFirebase(arrayList);
+                 if (!returnedValue.equals("")) {
+                     while (!returnedValue.equals("")) {
+                         submitToFirebase(arrayList);
+                     }
                  }
              }
 
@@ -297,6 +301,25 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
                 array.remove(conf.get(0));
             }
         }
+    }
+    private void showPopUp2(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Final.this);
+        builder.setTitle("Not enough people for that amount of tables");
+        builder.setMessage("Would you like to return to the table Arrangement section and try again?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(Final.this,TableSettings.class));
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+
     }
 
     private void checkConflicts(String nameConf) {
