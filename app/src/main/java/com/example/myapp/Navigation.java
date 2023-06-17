@@ -37,6 +37,7 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
     SharedPreferences sp,sp2;
     SharedPreferences.Editor editor;
     ArrayList<String> listQuestions;
+    boolean changed;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -138,8 +139,10 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
             else{
-                listQuestions.set(0,"yes");
                 showPopUp("people");
+                if(changed == true){
+                    listQuestions.set(0,"yes");
+                }
             }
         }
         if(view ==conflictsBt){
@@ -148,8 +151,10 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
             else {
-                listQuestions.set(1,"yes");
                 showPopUp("conflicts");
+                if(changed == true){
+                    listQuestions.set(1,"yes");
+                }
             }
         }
         if(view == foodBt){
@@ -158,8 +163,10 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
             else{
-                listQuestions.set(2,"yes");
                 showPopUp("food");
+                if(changed == true){
+                    listQuestions.set(2,"yes");
+                }
             }
         }
         if(view == home){
@@ -179,6 +186,7 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
         builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                changed = true;
                 Map<String,String> map = new HashMap<>();
                 map.put("answer1",listQuestions.get(0));
                 map.put("answer2",listQuestions.get(1));
@@ -208,6 +216,7 @@ public class Navigation extends AppCompatActivity implements View.OnClickListene
         builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                changed = false;
                 dialogInterface.cancel();
             }
         });

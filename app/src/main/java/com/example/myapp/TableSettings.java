@@ -49,7 +49,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
     DatabaseReference ref2;
     FirebaseAuth auth;
     int count;
-    SharedPreferences sp;
+    SharedPreferences sp,sp2;
     Button button2;
     int countObj,seetsCustom;
 
@@ -61,6 +61,7 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
         countObj = 1;
         seetsCustom = 0;
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
+        sp2 = getSharedPreferences("setTheTable",MODE_PRIVATE);
         layout = findViewById(R.id.layout);
         reset= findViewById(R.id.reset_button);
         reset.setOnClickListener(this);
@@ -252,9 +253,13 @@ public class TableSettings extends AppCompatActivity implements View.OnClickList
                             }
                             ref2.child(number).child("parameters").setValue(map);
                             ref2.child(number).child("parameters").child("custom").setValue(mapCustom);
+
                         }
                     }
                     count=0;
+                    SharedPreferences.Editor editor = sp2.edit();
+                    editor.putString("done","no");
+                    editor.commit();
                 }
 
                 @Override

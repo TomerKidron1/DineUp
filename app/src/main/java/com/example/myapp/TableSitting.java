@@ -1,8 +1,11 @@
 package com.example.myapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,6 +40,7 @@ public class TableSitting extends AppCompatActivity {
     SharedPreferences sp;
     ArrayList<String> arrayList;
     ArrayAdapter<String> adapter;
+    ImageView back;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,17 +57,15 @@ public class TableSitting extends AppCompatActivity {
         user = auth.getCurrentUser();
         ref = database.getReference();
         int tableNum = (getIntent().getIntExtra("TableNumber",0))+1;
-        Toast.makeText(this, ""+tableNum, Toast.LENGTH_SHORT).show();
         table_number.setText("Table "+tableNum);
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         ref.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(int i=0;i<snapshot.child("table "+tableNum).getChildrenCount();i++){
-                    arrayList.add((String)snapshot.child(("table "+tableNum)).child("person "+(i+1)).getValue());
+                    arrayList.add((String)snapshot.child(("table "+tableNum)).child("person "+i).getValue());
                     adapter.notifyDataSetChanged();
                 }
-                Toast.makeText(TableSitting.this, ""+arrayList, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -81,6 +83,15 @@ public class TableSitting extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+        back = findViewById(R.id.back_sitting);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(TableSitting.this,Final.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
             }
         });
 
@@ -104,4 +115,5 @@ public class TableSitting extends AppCompatActivity {
             imageview.setImageResource(R.drawable.custom);
 
     }
+
 }

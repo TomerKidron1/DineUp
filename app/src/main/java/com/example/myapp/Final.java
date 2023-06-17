@@ -45,16 +45,20 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference ref,ref2,ref3;
-    SharedPreferences sp;
+    SharedPreferences sp,sp2;
     int numberObj=0,numberCustom=0,countObj=0;
     ArrayList<String> people;
     ArrayList<DoubleString> conflicts;
+    String returnedValue;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.final_arrangement);
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
+        sp2 = getSharedPreferences("setTheTable", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp2.edit();
+        returnedValue = "";
         nav = findViewById(R.id.nav_final);
         peoplelist = findViewById(R.id.peoplelist_final);
         share = findViewById(R.id.share_final);
@@ -70,91 +74,94 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
         people = new ArrayList<>();
         ref2 = database.getReference();
         ref3 = database.getReference();
+        if(sp2.getString("done","no").equals("no")){
+            ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").removeValue();
+        }
         ref.child("Users").child(user.getUid()).child(sp.getString("number","")).child("parameters").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                numberObj = (int) snapshot.getChildrenCount();
-                if(snapshot.hasChild("custom"))
-                    numberObj = (numberObj-1)/3;
-                else
-                    numberObj = numberObj/3;
-                for(int i=0;i<numberObj;i++){
-                    if(snapshot.child("custom").exists() && snapshot.child("object "+i).equals("custom")){
-                        numberCustom++;
-                        LinearLayout linearLayout = new LinearLayout(Final.this);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(600,400);
-                        params.gravity = Gravity.CENTER;
-                        linearLayout.setBackgroundResource(R.drawable.frame_layout);
-                        params.bottomMargin = 30;
-                        linearLayout.setLayoutParams(params);
-                        ll.setGravity(Gravity.CENTER);
-                        ImageView obj = new ImageView(Final.this);
-                        obj.setImageResource(R.drawable.custom);
-                        int height = Math.toIntExact((Long) snapshot.child("custom").child("height "+numberCustom).getValue());
-                        int width = Math.toIntExact((Long) snapshot.child("custom").child("width "+numberCustom).getValue());
-                        LinearLayout.LayoutParams objParmas = new LinearLayout.LayoutParams(width, height);
-                        objParmas.gravity = Gravity.CENTER;
-                        obj.setLayoutParams(objParmas);
-                        obj.setForegroundGravity(Gravity.CENTER);
-                        linearLayout.setId(countObj);
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-                        linearLayout.setGravity(Gravity.CENTER);
-                        TextView tableNumber = new TextView(Final.this);
-                        tableNumber.setText("Table "+(countObj+1));
-                        tableNumber.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-                        tableNumber.setTextColor(Color.WHITE);
-                        Typeface typeface1 = ResourcesCompat.getFont(Final.this, R.font.inter_bold);
-                        tableNumber.setTypeface(typeface1);
-                        linearLayout.addView(tableNumber);
-                        linearLayout.addView(obj);
-                        ll.addView(linearLayout);
-                        countObj++;
-                        linearLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent i = new Intent(Final.this,TableSitting.class);
-                                i.putExtra("TableNumber",linearLayout.getId());
-                                startActivity(i);
-                            }
-                        });
+                    numberObj = (int) snapshot.getChildrenCount();
+                    if (snapshot.hasChild("custom"))
+                        numberObj = (numberObj - 1) / 3;
+                    else
+                        numberObj = numberObj / 3;
+                    for (int i = 0; i < numberObj; i++) {
+                        if (snapshot.child("custom").exists() && snapshot.child("object " + i).equals("custom")) {
+                            numberCustom++;
+                            LinearLayout linearLayout = new LinearLayout(Final.this);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(600, 400);
+                            params.gravity = Gravity.CENTER;
+                            linearLayout.setBackgroundResource(R.drawable.frame_layout);
+                            params.bottomMargin = 30;
+                            linearLayout.setLayoutParams(params);
+                            ll.setGravity(Gravity.CENTER);
+                            ImageView obj = new ImageView(Final.this);
+                            obj.setImageResource(R.drawable.custom);
+                            int height = Math.toIntExact((Long) snapshot.child("custom").child("height " + numberCustom).getValue());
+                            int width = Math.toIntExact((Long) snapshot.child("custom").child("width " + numberCustom).getValue());
+                            LinearLayout.LayoutParams objParmas = new LinearLayout.LayoutParams(width, height);
+                            objParmas.gravity = Gravity.CENTER;
+                            obj.setLayoutParams(objParmas);
+                            obj.setForegroundGravity(Gravity.CENTER);
+                            linearLayout.setId(countObj);
+                            linearLayout.setOrientation(LinearLayout.VERTICAL);
+                            linearLayout.setGravity(Gravity.CENTER);
+                            TextView tableNumber = new TextView(Final.this);
+                            tableNumber.setText("Table " + (countObj + 1));
+                            tableNumber.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                            tableNumber.setTextColor(Color.WHITE);
+                            Typeface typeface1 = ResourcesCompat.getFont(Final.this, R.font.inter_bold);
+                            tableNumber.setTypeface(typeface1);
+                            linearLayout.addView(tableNumber);
+                            linearLayout.addView(obj);
+                            ll.addView(linearLayout);
+                            countObj++;
+                            linearLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent i = new Intent(Final.this, TableSitting.class);
+                                    i.putExtra("TableNumber", linearLayout.getId());
+                                    startActivity(i);
+                                }
+                            });
+                        } else {
+                            LinearLayout linearLayout = new LinearLayout(Final.this);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(600, 400);
+                            params.gravity = Gravity.CENTER;
+                            linearLayout.setBackgroundResource(R.drawable.frame_layout);
+                            params.bottomMargin = 30;
+                            linearLayout.setLayoutParams(params);
+                            ll.setGravity(Gravity.CENTER);
+                            ImageView obj = new ImageView(Final.this);
+                            determinObject((String) snapshot.child("object " + i).getValue(), obj);
+                            LinearLayout.LayoutParams objParmas = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            objParmas.gravity = Gravity.CENTER;
+                            obj.setLayoutParams(objParmas);
+                            obj.setForegroundGravity(Gravity.CENTER);
+                            linearLayout.setId(countObj);
+                            linearLayout.setOrientation(LinearLayout.VERTICAL);
+                            linearLayout.setGravity(Gravity.CENTER);
+                            TextView tableNumber = new TextView(Final.this);
+                            tableNumber.setText("Table " + (countObj + 1));
+                            tableNumber.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                            tableNumber.setTextColor(Color.WHITE);
+                            Typeface typeface1 = ResourcesCompat.getFont(Final.this, R.font.inter_bold);
+                            tableNumber.setTypeface(typeface1);
+                            linearLayout.addView(tableNumber);
+                            linearLayout.addView(obj);
+                            ll.addView(linearLayout);
+                            countObj++;
+                            linearLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent i = new Intent(Final.this, TableSitting.class);
+                                    i.putExtra("TableNumber", (linearLayout.getId()));
+                                    startActivity(i);
+                                }
+                            });
+                        }
                     }
-                    else{
-                        LinearLayout linearLayout = new LinearLayout(Final.this);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(600,400);
-                        params.gravity = Gravity.CENTER;
-                        linearLayout.setBackgroundResource(R.drawable.frame_layout);
-                        params.bottomMargin = 30;
-                        linearLayout.setLayoutParams(params);
-                        ll.setGravity(Gravity.CENTER);
-                        ImageView obj = new ImageView(Final.this);
-                        determinObject((String)snapshot.child("object "+i).getValue(),obj);
-                        LinearLayout.LayoutParams objParmas = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-                        objParmas.gravity = Gravity.CENTER;
-                        obj.setLayoutParams(objParmas);
-                        obj.setForegroundGravity(Gravity.CENTER);
-                        linearLayout.setId(countObj);
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-                        linearLayout.setGravity(Gravity.CENTER);
-                        TextView tableNumber = new TextView(Final.this);
-                        tableNumber.setText("Table "+(countObj+1));
-                        tableNumber.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-                        tableNumber.setTextColor(Color.WHITE);
-                        Typeface typeface1 = ResourcesCompat.getFont(Final.this, R.font.inter_bold);
-                        tableNumber.setTypeface(typeface1);
-                        linearLayout.addView(tableNumber);
-                        linearLayout.addView(obj);
-                        ll.addView(linearLayout);
-                        countObj++;
-                        linearLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent i = new Intent(Final.this,TableSitting.class);
-                                i.putExtra("TableNumber",(linearLayout.getId()));
-                                startActivity(i);
-                            }
-                        });
-                    }
-                }
+
             }
 
             @Override
@@ -178,7 +185,8 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
         Utils.delay(2, new Utils.DelayCallback() {
             @Override
             public void afterDelay() {
-                buildArrays();
+                    buildArrays();
+
             }
         });
         ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).addValueEventListener(new ValueEventListener() {
@@ -236,152 +244,102 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
 
     }
     private void buildArrays(){
-        int peopleintable;
-        if(people.size()%2==0){
-             peopleintable = (people.size()/countObj);
-            for(int i=0;i<countObj;i++){
-                Map<String,String> map = new HashMap<>();
-                for(int j=0;j<peopleintable;j++){
-                    map.put("person "+(j+1),people.get(0));
-                    people.remove(0);
-                }
-                ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").child("table "+(i+1)).setValue(map);
+             ArrayList<ArrayList<String>> arrayList = new ArrayList<>();
+             for(int k=0;k<countObj;k++){
+                 if(!people.isEmpty()) {
+                     ArrayList<String> arrayList1 = new ArrayList<>();
+                     arrayList1.add(people.get(0));
+                     people.remove(0);
+                     arrayList.add(arrayList1);
+                 }
+                 else{
+                     Toast.makeText(this, "Not enough people for that amount of tables", Toast.LENGTH_SHORT).show();
+                 }
+             }
+             while(!people.isEmpty()){
+                 for(int i=0;i<countObj;i++){
+                     if(!people.isEmpty()){
+                         arrayList.get(i).add(people.get(0));
+                         people.remove(0);
+                     }
+                 }
+             }
+             submitToFirebase(arrayList);
+             if(!returnedValue.equals("")){
+                 while(!returnedValue.equals("")){
+                     submitToFirebase(arrayList);
+                 }
+             }
+
+
+    }
+    private void submitToFirebase(ArrayList<ArrayList<String>> arrayList){
+        for(int i=0;i<countObj;i++){
+            Map<String, String> map = new HashMap<>();
+            for(int h=0;h<arrayList.get(i).size();h++){
+                conflictsArrange(arrayList.get(i));
+                map.put("person "+h, arrayList.get(i).get(h));
+            }
+            ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").child("table "+(i+1)).setValue(map);
+        }
+    }
+    private void conflictsArrange(ArrayList<String> array){
+        if(!returnedValue.equals("")){
+            array.add(returnedValue);
+            returnedValue= "";
+        }
+        for(int i=0;i<conflicts.size();i++){
+            ArrayList<String> conf = new ArrayList<>();
+            conf.add(conflicts.get(i).getString1());
+            conf.add(conflicts.get(i).getString2());
+            if(array.containsAll(conf)){
+                returnedValue = conf.get(0);
+                array.remove(conf.get(0));
             }
         }
-        else{
-            int large = largestTable();
-            peopleintable = (people.size()/countObj);
-            for(int i=0;i<countObj;i++){
-                Map<String,String> map = new HashMap<>();
-                for(int j=0;j<peopleintable;j++){
-                    map.put("person "+(j+1),people.get(0));
-                    people.remove(0);
-                    if(i==(large)&&(j==(peopleintable-1))){
-                        map.put("person "+(j+2),people.get(0));
-                        people.remove(0);
-                    }
-                }
-
-                ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").child("table "+(i+1)).setValue(map);
-
-            }
-        }
-           checkConflicts("");
-
-
     }
 
     private void checkConflicts(String nameConf) {
         final String[] finalNameConf = {nameConf};
-        for(int i=0;i<countObj;i++) {
-            ArrayList<String> array = new ArrayList<>();
-            addValues(array,i);
+        for (int i = 0; i < countObj; i++) {
+            ArrayList<String> arrayList = new ArrayList<>();
+            if(!returnedValue.equals("")){
+                arrayList.add(returnedValue);
+                returnedValue ="";
+            }
+            //addValues(arrayList, i);
             int finalI = i;
             Utils.delay(1, new Utils.DelayCallback() {
                 @Override
                 public void afterDelay() {
-                    if (!finalNameConf[0].equals("")) {
-                        array.add(finalNameConf[0]);
-                        finalNameConf[0] = "";
-                    }
-                    int size = array.size();
-                    ArrayList<String> remove = new ArrayList<>();
-                    for (int k = 0; k < size; k++) {
-                        for (int h = 0; h < conflicts.size(); h++) {
-                            if (array.get(k).equals(conflicts.get(h).getString1())) {
-                                for (int l = 0; l < array.size(); l++) {
-                                    if (array.get(l).equals(conflicts.get(h).getString2())) {
-                                        finalNameConf[0] = array.get(l);
-                                        remove.add(array.get(l));
-                                    }
+                    for (int j = 0; j < conflicts.size(); j++) {
+                        ArrayList<String> current = new ArrayList<>();
+                        current.add(conflicts.get(j).getString1());
+                        current.add(conflicts.get(j).getString2());
+                        if (arrayList.containsAll(current)) {
+                            boolean flag = false;
+                            for (int s = 0; (flag == false) || (s < arrayList.size()); s++) {
+                                if (arrayList.get(s).equals(current.get(0))) {
+                                    returnedValue = arrayList.get(s);
+                                    arrayList.remove(s);
+                                    flag = true;
                                 }
                             }
-
                         }
                     }
-                    for(int b=0;b<remove.size();b++) {
-                        array.remove(remove.get(b));
-                    }
-                    ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").child("table "+(finalI +1)).setValue(array);
+                    ref3.child("Users").child(user.getUid()).child(sp.getString("number", "")).child("table sitting").child("table " + (finalI + 1)).setValue(arrayList);
                 }
             });
 
         }
-        if(!finalNameConf[0].equals("")){
-            checkConflicts(finalNameConf[0]);
-        }
+
     }
     private void addValues(ArrayList<String> array, int i){
-        CountDownLatch done = new CountDownLatch(0);
         ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("table sitting").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(int j = 0; j<snapshot.child("table "+(i +1)).getChildrenCount(); j++){
-                    array.add((String)snapshot.child("table "+(i +1)).child("person "+(j+1)).getValue());
-                }
-                done.countDown();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        try {
-            done.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private int largestTable() {
-        final int[] largestNumber = {0};
-        ref3.child("Users").child(user.getUid()).child(sp.getString("number","")).child("parameters").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int largest=0;
-                for(int i=0;i<countObj;i++){
-                    if(snapshot.child("object "+i).getValue().equals("bigCircle"))
-                        if(largest<16) {
-                            largest = 16;
-                            largestNumber[0] = i;
-                        }
-                    if(snapshot.child("object "+i).getValue().equals("smallCircle"))
-                        if(largest<8) {
-                            largest = 8;
-                            largestNumber[0] = i;
-                        }
-                    if(snapshot.child("object "+i).getValue().equals("rectangle"))
-                        if(largest<20) {
-                            largest = 20;
-                            largestNumber[0] = i;
-                        }
-                    if(snapshot.child("object "+i).getValue().equals("verticalRectangle"))
-                        if(largest<20) {
-                            largest = 20;
-                            largestNumber[0] = i;
-                        }
-                    if(snapshot.child("object "+i).getValue().equals("roundedRectangle"))
-                        if(largest<18) {
-                            largest = 18;
-                            largestNumber[0] = i;
-                        }
-                    if(snapshot.child("object "+i).getValue().equals("verticalRoundedRectangle"))
-                        if(largest<18) {
-                            largest = 18;
-                            largestNumber[0] = i;
-                        }
-                    if(snapshot.child("object "+i).getValue().equals("square"))
-                        if(largest<14) {
-                            largest = 14;
-                            largestNumber[0] = i;
-                        }
-                    if(snapshot.child("object "+i).getValue().equals("custom"))
-                        if(Math.toIntExact((Long)snapshot.child("custom").child("seets").getValue())>largest) {
-                            largest = Math.toIntExact((Long) snapshot.child("custom").child("seets").getValue());
-                            largestNumber[0] = i;
-                        }
+                    array.add((String)snapshot.child("table "+(i +1)).child("person "+j).getValue());
                 }
             }
 
@@ -390,6 +348,10 @@ public class Final extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
-        return (largestNumber[0]+1);
+
     }
+
+
+
+
 }

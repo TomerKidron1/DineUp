@@ -48,7 +48,7 @@ public class People extends AppCompatActivity implements View.OnClickListener {
     FirebaseAuth auth;
     FirebaseUser user;
     SharedPreferences sp;
-    SharedPreferences sp1;
+    SharedPreferences sp1,sp2;
     NetReciever netReciever = new NetReciever();
 
     @Override
@@ -60,6 +60,7 @@ public class People extends AppCompatActivity implements View.OnClickListener {
         ref=ref.child("Users");
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
         sp1 = getSharedPreferences("questions",MODE_PRIVATE);
+        sp2 = getSharedPreferences("setTheTable", MODE_PRIVATE);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         people_list = findViewById(R.id.listview_people);
@@ -196,6 +197,9 @@ public class People extends AppCompatActivity implements View.OnClickListener {
                map.put("person "+(i+1),arrayList.get(i));
            }
            ref.child(userId).child(sp.getString("number","")).child("people").setValue(map);
+           SharedPreferences.Editor editor = sp2.edit();
+           editor.putString("done","no");
+           editor.commit();
            if(sp1.getString("answer2","").equals("yes")) {
                startActivity(new Intent(this, Conflicts.class));
                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);

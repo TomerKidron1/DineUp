@@ -15,6 +15,6 @@ public class Utils {
             public void run() {
                 delayCallback.afterDelay();
             }
-        }, secs * 1000);
+        }, secs * 100);
     }
 }

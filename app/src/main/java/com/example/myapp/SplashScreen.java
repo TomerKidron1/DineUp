@@ -30,7 +30,7 @@ public class SplashScreen extends AppCompatActivity {
 
     }
     public void delay(String restoredEmail) {
-        Utils.delay(4, new Utils.DelayCallback() {
+        Utils.delay(40, new Utils.DelayCallback() {
             @Override
             public void afterDelay() {
                 if (restoredEmail.isEmpty()) {

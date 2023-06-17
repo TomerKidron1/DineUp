@@ -57,7 +57,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
     int count;
     FirebaseDatabase database;
     DatabaseReference ref,refPeople,refConflicts,refConflictsObjects;
-    SharedPreferences sp;
+    SharedPreferences sp,sp2;
     Dialog dialog;
     ArrayList<String> people,conflicts;
     FirebaseUser user;
@@ -88,6 +88,7 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
         refConflictsObjects = database.getReference();
         refConflicts = database.getReference();
         sp = getSharedPreferences("currentProject",MODE_PRIVATE);
+        sp2 = getSharedPreferences("setTheTable", MODE_PRIVATE);
         refPeople.child("Users").child(user.getUid()).child(sp.getString("number","")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -616,6 +617,9 @@ public class Conflicts extends AppCompatActivity implements View.OnClickListener
                     }
                     name1 = button1.getText().toString();
                 }
+                SharedPreferences.Editor editor = sp2.edit();
+                editor.putString("done","no");
+                editor.commit();
                 refConflicts.child("Users").child(user.getUid()).child(sp.getString("number","")).child("conflicts").setValue(mapComplete);
                 startActivity(new Intent(this,Food.class));
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);

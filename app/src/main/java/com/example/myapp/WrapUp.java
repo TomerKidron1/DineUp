@@ -144,11 +144,11 @@ public class WrapUp extends AppCompatActivity implements View.OnClickListener {
             boolean flag=true;
             for(int i=0;i<whatsdone.size()&&flag==true;i++){
                 if(whatsdone.get(i).equals("no")){
-                    if((sp2.getString("answer2","").equals("yes")&& i==3)||(sp2.getString("answer3","").equals("yes")&&i==4)){
-                        flag = false;
+                    if((i==2&& sp2.getString("answer1","").equals("yes"))||(i==3&&sp2.getString("answer2","").equals("yes"))||(i==4&&sp2.getString("answer3","").equals("yes"))){
+                        flag = true;
                     }
                     else
-                        flag=true;
+                        flag=false;
                 }
             }
             if(flag==false){
